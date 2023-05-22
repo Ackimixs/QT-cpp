@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.25)
-project(tp1)
+project(tp2)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_AUTOMOC ON)
@@ -14,8 +14,8 @@ find_package(Qt6 COMPONENTS
         Widgets
         REQUIRED)
 
-add_executable(tp1 main.cpp Window.cpp Window.h WindowTest.cpp WindowTest.cpp WindowTest.h)
-target_link_libraries(tp1
+add_executable(tp2 main.cpp SQLClientWindow.cpp SQLClientWindow.h ButtonPanel.cpp ButtonPanel.h LabeledTextField.cpp LabeledTextField.h ConfigurationDialog.cpp ConfigurationDialog.h)
+target_link_libraries(tp2
         Qt::Core
         Qt::Gui
         Qt::Widgets

@@ -1,23 +1,15 @@
-#include "WindowTest.h"
+#include <QApplication>
+#include "SQLClientWindow.h"
+#include "ConfigurationDialog.h"
 
-int main(int argc, char **argv) {
-/*
-    QPushButton button ("Hello world !");
+int main(int argc, char *argv[]) {
+    QApplication a(argc, argv);
 
-    QPushButton buttonFils("Fils", &button);
-
-    button.show();
-*/
-/*
-    QWidget w;
-    w.setFixedSize(100, 50);
-
-    QPushButton button("fils", &w);
-
-    button.setGeometry(10, 10, 80, 30);
+    SQLClientWindow w;
+    ConfigurationDialog cg;
 
     w.show();
-*/
+    cg.show();
 
-    return test(argc, argv);
+    return QApplication::exec();
 }
