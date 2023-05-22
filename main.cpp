@@ -1,15 +1,17 @@
 #include <QApplication>
-#include "SQLClientWindow.h"
-#include "ConfigurationDialog.h"
+#include <QPushButton>
+
+#include "MainWindow.h"
+#include "ex2.h"
 
 int main(int argc, char *argv[]) {
     QApplication a(argc, argv);
+    /*MainWindow m;
 
-    SQLClientWindow w;
-    ConfigurationDialog cg;
+    m.show();*/
 
-    w.show();
-    cg.show();
+    ex2 m;
 
+    m.show();
     return QApplication::exec();
 }
