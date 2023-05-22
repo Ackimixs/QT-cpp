@@ -1,0 +1,9 @@
+<!DOCTYPE RCC>
+<RCC version="1.0">
+    <qresource>
+        <file>img/panorama.jpg</file>
+        <file>img/plane_blue.png</file>
+        <file>img/plane_green.png</file>
+        <file>img/plane_red.png</file>
+    </qresource>
+</RCC>

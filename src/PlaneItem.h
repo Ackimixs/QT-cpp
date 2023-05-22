@@ -16,7 +16,7 @@ private :
 
 public:
 
-    PlaneItem(QString imageFileName) : QGraphicsPixmapItem(QPixmap(imageFileName)) {
+    PlaneItem(QString imageFileName) : QGraphicsPixmapItem(QPixmap(":/img/" + imageFileName)) {
         this->speed = Utils::randInt(1, 10);
     }
 

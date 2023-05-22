@@ -10,7 +10,7 @@
 
 MainScene::MainScene() {
 
-    this->background.load("panorama.jpg");
+    this->background.load(":/img/panorama.jpg");
     this->setSceneRect(0, 0, background.width(), background.height());
 
     this->timer = new QTimer(this);
