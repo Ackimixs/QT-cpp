@@ -1,9 +1,30 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
-        <file>img/panorama.jpg</file>
-        <file>img/plane_blue.png</file>
-        <file>img/plane_green.png</file>
-        <file>img/plane_red.png</file>
+        <file>assets/img/player/plane_1_blue.png</file>
+        <file>assets/img/player/plane_1_pink_reverse.png</file>
+        <file>assets/img/player/Aircraft_07.png</file>
+        <file>assets/img/player/Aircraft_01.png</file>
+
+        <file>assets/img/bullet/torpedo.png</file>
+        <file>assets/img/bullet/fire_ball_1.png</file>
+
+        <file>assets/img/background/sky_background_green_hills.png</file>
+
+        <file>assets/img/Explosion/explosion_01.png</file>
+        <file>assets/img/Explosion/explosion_02.png</file>
+        <file>assets/img/Explosion/explosion_03.png</file>
+        <file>assets/img/Explosion/explosion_04.png</file>
+        <file>assets/img/Explosion/explosion_05.png</file>
+        <file>assets/img/Explosion/explosion_06.png</file>
+        <file>assets/img/Explosion/explosion_07.png</file>
+        <file>assets/img/Explosion/explosion_08.png</file>
+        <file>assets/img/Explosion/explosion_09.png</file>
+
+        <file>assets/img/powerup/potion.png</file>
+        <file>assets/img/powerup/heal.png</file>
+        <file>assets/img/powerup/pearl.png</file>
+        <file>assets/img/powerup/pearl_blue.png</file>
+        <file>assets/img/powerup/torpedo.png</file>
     </qresource>
 </RCC>

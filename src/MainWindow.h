@@ -1,28 +1,35 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
-
-#include "MainScene.h"
+#ifndef CPP_QT_TPMINIPROJET_MAINWINDOW_H
+#define CPP_QT_TPMINIPROJET_MAINWINDOW_H
 
 #include <QMainWindow>
 #include <QGraphicsView>
-#include <QVector>
+#include <QMenu>
+#include <QMenuBar>
+#include <QAction>
+#include <QMessageBox>
+#include <QDebug>
 
+#include "MyScene.h"
+#include "Player.h"
+#include "Database.h"
 
-class MainWindow : public QMainWindow
-{
+class MainWindow : public QMainWindow {
     Q_OBJECT
 
 private :
-    MainScene* mainScene;
-
-    QVector<QGraphicsView*> planeViews;
+    MyScene* mainScene;
     QGraphicsView* mainView;
-
+    QMenu* helpMenu;
+    Database* db;
 
 public:
     MainWindow(QWidget* parent = nullptr);
-    virtual ~MainWindow() {};
+    virtual ~MainWindow();
+
+public slots:
+    void slot_aboutMenu();
 
 };
 
-#endif // MAINWINDOW_H
+
+#endif //CPP_QT_TPMINIPROJET_MAINWINDOW_H

@@ -1,26 +1,44 @@
-#include <QHBoxLayout>
-
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
-    planeViews = QVector<QGraphicsView*>();
+    this->mainScene = new MyScene;
 
-    this->mainScene = new MainScene();
+    this->mainView = new QGraphicsView(this);
+    this->mainView->setScene(mainScene);
 
-    mainView = new QGraphicsView();
-    mainView->setScene(mainScene);
-    mainView->scale(0.2, 0.2);
+    this->mainView->setAlignment(Qt::AlignLeft | Qt::AlignTop);
+    this->mainView->setResizeAnchor(QGraphicsView::NoAnchor);
+
+    QImage img(":/assets/img/background/sky_background_green_hills.png");
+    this->mainScene->setBackgroundBrush(img);
 
     this->setCentralWidget(mainView);
-    this->setWindowTitle("Main view");
-    this->resize(900, 300);
+    this->setWindowTitle("My main window");
+    this->resize(400, 800);
 
-    for (int i = 0; i < 3; i++) {
-        planeViews.append(new QGraphicsView());
-        planeViews[i]->setWindowTitle(QString("plane %1").arg(i + 1));
-        planeViews[i]->resize(300, 300);
-        planeViews[i]->setScene(this->mainScene);
-        planeViews[i]->show();
-    }
+    this->mainScene->setSceneRect(this->geometry());
+
+    this->resize(420, 840);
+
+    this->mainScene->resizePlane(400, 800);
+
+    helpMenu = menuBar()->addMenu(tr("&Help"));
+    QAction* actionHelp = new QAction(tr("&About"), this);
+    connect(actionHelp, SIGNAL(triggered()), this, SLOT(slot_aboutMenu()));
+    helpMenu->addAction(actionHelp);
+
+    this->db = new Database();
+
+}
+
+MainWindow::~MainWindow(){
+
+}
+
+void MainWindow::slot_aboutMenu(){
+    QMessageBox msgBox;
+    msgBox.setText("A small QT/C++ projet...");
+    msgBox.setModal(true); // on souhaite que la fenetre soit modale i.e qu'on ne puisse plus cliquer ailleurs
+    msgBox.exec();
 }

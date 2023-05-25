@@ -1,19 +1,24 @@
 cmake_minimum_required(VERSION 3.10)
-project(tp4)
+project(CPP_QT_TPminiprojet)
+
+set(CMAKE_CXX_STANDARD 14)
 
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
+
+configure_file(${CMAKE_SOURCE_DIR}/.env ${CMAKE_BINARY_DIR}/.env COPYONLY)
 
 find_package(Qt6 COMPONENTS
         Core
         Gui
         Widgets
         Multimedia
+        Sql
         REQUIRED)
 
-file (GLOB_RECURSE CIR2_sceneview_src src/*.cpp src/*.h)
+file (GLOB_RECURSE sourceCode src/*.cpp src/*.h)
 
-add_executable(tp4 ${CIR2_sceneview_src} res.qrc)
+add_executable(CPP_QT_TPminiprojet ${sourceCode} res.qrc src/Explosion.cpp src/Explosion.h src/PowerUp/HealPowerUp.cpp src/PowerUp/HealPowerUp.h src/PowerUp/RateOfFirePowerUp.cpp src/PowerUp/RateOfFirePowerUp.h src/PowerUp.cpp src/PowerUp.h)
 
-target_link_libraries(tp4 Qt6::Widgets Qt6::Multimedia)
+target_link_libraries(CPP_QT_TPminiprojet Qt6::Widgets Qt6::Multimedia Qt6::Sql)
