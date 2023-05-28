@@ -7,9 +7,6 @@
 class RateOfFirePowerUp : public PowerUp {
 public:
     RateOfFirePowerUp();
-
-    PowerUp::Type getPowerUp() override;
-
 };
 
 

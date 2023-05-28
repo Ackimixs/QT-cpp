@@ -19,6 +19,6 @@ find_package(Qt6 COMPONENTS
 
 file (GLOB_RECURSE sourceCode src/*.cpp src/*.h)
 
-add_executable(CPP_QT_TPminiprojet ${sourceCode} res.qrc src/Explosion.cpp src/Explosion.h src/PowerUp/HealPowerUp.cpp src/PowerUp/HealPowerUp.h src/PowerUp/RateOfFirePowerUp.cpp src/PowerUp/RateOfFirePowerUp.h src/PowerUp.cpp src/PowerUp.h)
+add_executable(CPP_QT_TPminiprojet ${sourceCode} res.qrc)
 
 target_link_libraries(CPP_QT_TPminiprojet Qt6::Widgets Qt6::Multimedia Qt6::Sql)

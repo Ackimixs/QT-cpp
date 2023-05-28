@@ -60,9 +60,9 @@ void Player::keyPressEvent(QKeyEvent *event) {
         if (QTime::currentTime() > this->timeUntilNewShoot) {
             this->timeUntilNewShoot = QTime::currentTime().addSecs(this->timeBetween2Shoot);
 
-            Bullet* bullet = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -90, 20);
-            Bullet* bulletLeft = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -95, 20);
-            Bullet* bulletRight = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -85, 20);
+            Bullet* bullet = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -90, 20, this->isSniperUp);
+            Bullet* bulletLeft = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -95, 20, this->isSniperUp);
+            Bullet* bulletRight = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -85, 20, this->isSniperUp);
             this->scene()->addItem(bullet);
             this->scene()->addItem(bulletLeft);
             this->scene()->addItem(bulletRight);
@@ -106,7 +106,7 @@ void Player::addPoint() {
 }
 
 void Player::reset() {
-    this->lifePoint = 0;
+    this->lifePoint = 3;
     this->score = 0;
     this->lifePointText->setPlainText("Life : " + QString::number(this->lifePoint));
     this->scoreText->setPlainText("Score :" + QString::number(this->score));
@@ -115,10 +115,19 @@ void Player::reset() {
 
 void Player::update() {
 
+    if (this->gameOver) return;
+
+    this->setPos(this->x() + Utils::randInt(-1, 2), this->y());
+
     if (isRateOfFireUp) {
         if (QTime::currentTime() > timeUntilRateOfFire) {
             this->isRateOfFireUp = false;
             this->timeBetween2Shoot = 1;
+        }
+    }
+    if (isSniperUp) {
+        if (QTime::currentTime() > timeUntilSniper) {
+            this->isSniperUp = false;
         }
     }
 
@@ -136,6 +145,11 @@ void Player::update() {
                 this->isRateOfFireUp = true;
                 this->timeUntilRateOfFire = QTime::currentTime().addSecs(5);
                 delete powerUp;
+            } else if (type == PowerUp::Sniper) {
+                this->timeBetween2Shoot = 1;
+                this->isSniperUp = true;
+                this->timeUntilSniper = QTime::currentTime().addSecs(5);
+                delete powerUp;
             }
         }
     }
@@ -146,4 +160,9 @@ void Player::addLifePoint() {
     this->lifePointText->setPlainText("Life : " + QString::number(this->lifePoint));
 }
 
-//TODO faire un power Up sniper qui passe a travers
+/** TODO
+ * faire un très grande map, avions qui décolle du sol va dans les nuages vas dans l'espace et passe dans un portail qui le tp en bas
+ * quand le perso meurt il reviens en bas comme ca le widget game over reste tout le temps en bas
+ * le reset le fait aussi aller en bas
+ *
+ */

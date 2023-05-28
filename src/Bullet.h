@@ -12,6 +12,7 @@
 #include "Explosion.h"
 #include "PowerUp/HealPowerUp.h"
 #include "PowerUp/RateOfFirePowerUp.h"
+#include "PowerUp/SniperPowerUp.h"
 
 class Bullet : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT
@@ -21,7 +22,7 @@ public:
         playerBullet
     };
 
-    Bullet(QString filename, Type type = playerBullet, qreal angle = -90, qreal speed = 10, QGraphicsPixmapItem* parent = nullptr);
+    Bullet(QString filename, Type type = playerBullet, qreal angle = -90, qreal speed = 10, bool isSniper = false, QGraphicsPixmapItem* parent = nullptr);
 
     ~Bullet();
 
@@ -31,6 +32,7 @@ private:
     qreal speed;
     qreal type;
     bool gameOver;
+    bool isSniper;
 
 public slots:
     void move();

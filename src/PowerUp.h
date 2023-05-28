@@ -15,6 +15,7 @@ public:
     enum Type {
         Heal,
         RateOfFire,
+        Sniper,
         Null
     };
 

@@ -7,7 +7,3 @@ RateOfFirePowerUp::RateOfFirePowerUp() : PowerUp() {
 
     this->type = PowerUp::RateOfFire;
 }
-
-PowerUp::Type RateOfFirePowerUp::getPowerUp() {
-    return this->type;
-}

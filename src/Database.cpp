@@ -1,4 +1,3 @@
-
 #include "Database.h"
 
 Database::Database() {
@@ -13,15 +12,10 @@ Database::Database() {
 
     if (db.open()) {
         this->dbOpen = true;
-        // Connection successful
         Logger::log({"Database"}, Logger::Success, "Connection succesfull");
-
-        QList<QMap<QString, QString>> res = this->query("SELECT * FROM LEADERBOARD");
-
     } else {
         this->dbOpen = false;
-        // Connection failed
-        Logger::log({"Database"}, Logger::Error, "Connection failed");
+        Logger::log({"Database"}, Logger::Error, "Connection failed, switch to file system");
     }
 
 }
@@ -32,24 +26,27 @@ Database::~Database() {
 }
 
 QList<QMap<QString, QString>> Database::query(QString query) {
-
-    if (!this->dbOpen) {
-        Logger::log({"Database", "Query"}, Logger::Error, "trying to query while database is not open");
-        return {};
+    if (this->dbOpen) {
+        return this->queryWIthDatabase(query);
+    } else {
+        QList<QString> newQuery = Utils::parseSqlQuery(query);
+        return this->queryInAFile(newQuery[0], newQuery[1], newQuery[3], newQuery[2]);
     }
+}
 
-    this->q = new QSqlQuery(query);
+QList<QMap<QString, QString>> Database::queryWIthDatabase(QString query) {
+    this->q = this->db.exec(query);
 
     QList<QMap<QString, QString>> res;
-    while (this->q->next()) {
+    while (this->q.next()) {
         QMap<QString, QString> rowRes;
 
-        QSqlRecord record = q->record();
+        QSqlRecord record = q.record();
         int columnCount = record.count();
 
         for (int j = 0; j < columnCount; j++) {
             QString col = record.fieldName(j);
-            rowRes.insert(col, this->q->value(j).toString());
+            rowRes.insert(col, this->q.value(j).toString());
         }
         res.append(rowRes);
     }
@@ -57,6 +54,72 @@ QList<QMap<QString, QString>> Database::query(QString query) {
     Logger::log({"Database", "Query"}, Logger::Success, query, true);
 
     return res;
+}
+
+QList<QMap<QString, QString>> Database::queryInAFile(QString dataToSelect, QString table, QString orderBy, QString columnToSort) {
+    QFile file(table + ".csv");
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QTextStream in(&file);
+        QString fileContents = in.readAll();
+        file.close();
+        QStringList everyRow = fileContents.split("\n");
+
+        QStringList column = everyRow[0].split(';');
+
+        QList<QMap<QString, QString>> res;
+
+        for (int i = 1; i < everyRow.count() - 1; i++) {
+            QMap<QString, QString> rowRes;
+            QStringList data = everyRow[i].split(";");
+            for (int j = 0; j < column.count(); j++) {
+                rowRes.insert(column[j], data[j]);
+            }
+            res.append(rowRes);
+        }
+
+        if ((orderBy == "ASC" || orderBy == "DESC") && columnToSort != "") {
+            std::sort(res.begin(), res.end(), [&](const QMap<QString, QString>& map1, const QMap<QString, QString>& map2) {
+                return Utils::compareMaps(map1, map2, columnToSort, orderBy);
+            });
+        }
+
+        Logger::log({"Database", "File system", "Query"}, Logger::Success, table, true);
+
+        return res;
+    }
+    else {
+        Logger::log({"Database", "File system"}, Logger::Error, "Failed to open file for reading : " + table + ".csv");
+        return {};
+    }
+}
+
+void Database::insert(QString query) {
+    if (this->dbOpen) {
+        this->insertWithDatabase(query);
+    } else {
+        QList<QString> newQuery = Utils::parseInsertQuery(query);
+        this->insertInAFile(newQuery[0], newQuery[1]+ "," + QDate::currentDate().toString("dd-MM-yyyy"));
+    }
+}
+
+void Database::insertWithDatabase(QString query) {
+    this->db.exec(query);
+}
+
+void Database::insertInAFile(QString table, QString data) {
+    QFile file(table + ".csv");
+
+    if (file.open(QIODevice::Append | QIODevice::Text)) {
+        QTextStream out(&file);
+        data = (data.remove(" ").split(',').join(";")) + "\n";
+        out << data;
+        file.close();
+        Logger::log({"Database", "File system"}, Logger::Success, "Writing data in file : " + table + ".csv");
+    }
+    else {
+        Logger::log({"Database", "File system"}, Logger::Error, "Failed to open file for writing : " + table + ".csv");
+    }
 }
 
 void Database::printList(QList<QMap<QString, QString>> listOfString) {

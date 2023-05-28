@@ -5,24 +5,44 @@
 #include <QTimer>
 #include <QGraphicsView>
 #include <QKeyEvent>
+#include <QTextEdit>
+#include <QVBoxLayout>
+#include <QGraphicsWidget>
+#include <QLabel>
+#include <QPushButton>
+#include <QGraphicsProxyWidget>
+#include <QTextItem>
 
 #include "Player.h"
 #include "Enemies.h"
+#include "Database.h"
 
 class MyScene : public QGraphicsScene {
     Q_OBJECT
 
 public:
-    MyScene(QObject* parent = nullptr);
+    MyScene(Database* db, QObject* parent = nullptr);
     virtual ~MyScene();
 
     void resizePlane(qreal sceneWidth, qreal sceneHeight);
 
+    void setupGameOverScreen();
+
 private:
+
+    Database* db;
 
     QTimer* timer;
     Player* player;
     bool gameOver;
+
+    //Game Over
+    QLabel* userScoreText = nullptr;
+    QLabel* leaderBoardText = nullptr;
+    QTextEdit* gameOverLeaderBoard = nullptr;
+    QWidget* gameOverWidget = nullptr;
+    QVBoxLayout* gameOverLayout = nullptr;
+    QPushButton* gameOverRestartButton = nullptr;
 
 public slots:
 

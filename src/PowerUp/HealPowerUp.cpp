@@ -2,12 +2,8 @@
 
 HealPowerUp::HealPowerUp() : PowerUp() {
     QPixmap base = this->pixmap();
-    QPixmap rateOfFirePixmap(":/assets/img/powerup/heal.png");
-    this->setPixmap(Utils::addPixmapOnTop(base, rateOfFirePixmap));
+    QPixmap healPixmap(":/assets/img/powerup/heal.png");
+    this->setPixmap(Utils::addPixmapOnTop(base, healPixmap));
 
     this->type = PowerUp::Heal;
-}
-
-PowerUp::Type HealPowerUp::getPowerUp() {
-    return this->type;
 }

@@ -10,6 +10,7 @@
         <file>assets/img/bullet/fire_ball_1.png</file>
 
         <file>assets/img/background/sky_background_green_hills.png</file>
+        <file>assets/img/background/backgroundTest.png</file>
 
         <file>assets/img/Explosion/explosion_01.png</file>
         <file>assets/img/Explosion/explosion_02.png</file>
@@ -26,5 +27,6 @@
         <file>assets/img/powerup/pearl.png</file>
         <file>assets/img/powerup/pearl_blue.png</file>
         <file>assets/img/powerup/torpedo.png</file>
+        <file>assets/img/powerup/sniper.png</file>
     </qresource>
 </RCC>

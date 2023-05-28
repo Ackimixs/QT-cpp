@@ -1,6 +1,6 @@
 #include "MyScene.h"
 
-MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
+MyScene::MyScene(Database* db, QObject* parent) : QGraphicsScene(parent), gameOver(false), db(db) {
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
     this->timer->start(3000);
@@ -16,6 +16,7 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
 
     connect(this->player, SIGNAL(gameOverFunc()), this, SLOT(gameOverFunc()));
     connect(this->player, SIGNAL(gameRestartSignal()), this, SLOT(restartSlots()));
+
 }
 
 MyScene::~MyScene() {
@@ -38,6 +39,13 @@ void MyScene::update() {
     connect(newEnemies, SIGNAL(collisionWithPlayerSignal()), this, SLOT(handlePlayerCollision()));
     connect(this, SIGNAL(gameOverSignal()), newEnemies, SLOT(gameOverSlot()));
     newEnemies->setPos(x, y);
+
+    this->timer->stop();
+    if (this->player->getScore() > 0) {
+        this->timer->start(3000 - int(2600 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else {
+        this->timer->start(3000);
+    }
 }
 
 void MyScene::resizePlane(qreal sceneWidth, qreal sceneHeight) {
@@ -51,13 +59,41 @@ void MyScene::handlePlayerCollision() {
 void MyScene::gameOverFunc() {
     this->gameOver = true;
     emit gameOverSignal();
-}
 
-void MyScene::restartSlots() {
     QList<QGraphicsItem *> items = this->items();
 
     for (int i = 0; i < items.count(); i++) {
-        if (typeid(*items[i]) != typeid(Player) && typeid(*items[i]) != typeid(QGraphicsTextItem)) {
+        if (typeid(*items[i]) == typeid(Enemies) || typeid(*items[i]) == typeid(Bullet)) {
+            delete (items[i]);
+        }
+    }
+
+    this->gameOverWidget->show();
+
+    qreal score = this->player->getScore();
+    this->db->insert("INSERT INTO leaderboard (player, score) VALUES ('ackimixs', " + QString::number(score) +")");
+
+    this->userScoreText->setText("your score : " + QString::number(score));
+    this->leaderBoardText->setText("Leaderboard");
+
+    this->gameOverLeaderBoard->clear();
+
+    QList<QMap<QString, QString>> data = this->db->query("SELECT * FROM leaderboard ORDER BY score DESC;");
+    for (int i = 0; i < data.count(); i++) {
+        this->gameOverLeaderBoard->append(data[i].value("player") + " : " + data[i].value("score") + " - " + data[i].value("date").mid(0, 10));
+    }
+
+    this->gameOverWidget->raise();
+}
+
+void MyScene::restartSlots() {
+
+    this->gameOverWidget->hide();
+
+    QList<QGraphicsItem *> items = this->items();
+
+    for (int i = 0; i < items.count(); i++) {
+        if (typeid(*items[i]) == typeid(Enemies) || typeid(*items[i]) == typeid(Bullet)) {
             delete (items[i]);
         }
     }
@@ -65,5 +101,38 @@ void MyScene::restartSlots() {
     this->player->reset();
     this->resizePlane(400, 800);
 
+    this->gameOver = false;
+
+    this->timer->start(3000);
+
+    this->player->setFocus();
+
     Logger::log({"Game"}, Logger::Debug, "Game fully restarted", true);
+}
+
+void MyScene::setupGameOverScreen() {
+    //GAME OVER
+    this->gameOverWidget = new QWidget();
+    this->addWidget(this->gameOverWidget);
+    this->gameOverWidget->setGeometry(25, 100, this->width() - 50, this->height() - 200);
+    this->gameOverWidget->setWindowOpacity(0.7);
+    this->gameOverLayout = new QVBoxLayout();
+    this->gameOverWidget->setLayout(this->gameOverLayout);
+    this->gameOverLeaderBoard = new QTextEdit();
+    QFont font = this->gameOverLeaderBoard->font();
+    font.setPointSize(16);
+    this->gameOverLeaderBoard->setFont(font);
+    this->gameOverLeaderBoard->setReadOnly(true);
+
+    this->userScoreText = new QLabel();
+    this->leaderBoardText = new QLabel();
+    this->gameOverRestartButton = new QPushButton("Restart !");
+    connect(this->gameOverRestartButton, SIGNAL(pressed()), this, SLOT(restartSlots()));
+
+    this->gameOverLayout->addWidget(this->userScoreText);
+    this->gameOverLayout->addWidget(this->leaderBoardText);
+    this->gameOverLayout->addWidget(this->gameOverLeaderBoard);
+    this->gameOverLayout->addWidget(this->gameOverRestartButton);
+
+    this->gameOverWidget->hide();
 }

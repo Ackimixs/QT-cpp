@@ -34,7 +34,12 @@ private:
 
     QTime timeUntilRateOfFire;
 
+    bool isSniperUp;
+
+    QTime timeUntilSniper;
+
     QTimer* timer;
+
 public:
     Player(QString imageFileName);
 
@@ -55,6 +60,8 @@ public:
     QGraphicsTextItem* scoreText;
 
     void addLifePoint();
+
+    qreal getScore() const { return this->score; };
 
 public slots:
     void addPoint();

@@ -7,7 +7,6 @@ class HealPowerUp : public PowerUp {
 public:
     HealPowerUp();
 
-    PowerUp::Type getPowerUp() override;
 };
 
 

@@ -21,6 +21,9 @@ private :
     QGraphicsView* mainView;
     QMenu* helpMenu;
     Database* db;
+    QTimer* timer;
+
+    int actualCut = 1;
 
 public:
     MainWindow(QWidget* parent = nullptr);
@@ -29,6 +32,7 @@ public:
 public slots:
     void slot_aboutMenu();
 
+    void update();
 };
 
 
