@@ -15,18 +15,6 @@ class EnvFile
 public:
     static QMap<QString, QString> readFile(const QString& filePath);
 
-    EnvFile(const QString& filePath)
-    {
-        envVariables = readFile(filePath);
-    }
-
-    QString getValue(const QString& key) const
-    {
-        return envVariables.value(key);
-    }
-
-private:
-    QMap<QString, QString> envVariables;
 };
 
 

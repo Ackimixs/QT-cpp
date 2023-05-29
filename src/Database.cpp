@@ -1,7 +1,7 @@
 #include "Database.h"
 
 Database::Database() {
-    this->db = QSqlDatabase::addDatabase("QPSQL");
+    QSqlDatabase db = QSqlDatabase::addDatabase("QPSQL");
 
     auto envData = EnvFile::readFile(".env");
 
@@ -22,6 +22,7 @@ Database::Database() {
 
 Database::~Database() {
     Logger::log({"Database"}, Logger::Delete, "Database disconnected", true);
+    QSqlDatabase db = QSqlDatabase::database();
     db.close();
 }
 
@@ -35,7 +36,8 @@ QList<QMap<QString, QString>> Database::query(QString query) {
 }
 
 QList<QMap<QString, QString>> Database::queryWIthDatabase(QString query) {
-    this->q = this->db.exec(query);
+    QSqlDatabase db = QSqlDatabase::database();
+    this->q = db.exec(query);
 
     QList<QMap<QString, QString>> res;
     while (this->q.next()) {
@@ -104,7 +106,8 @@ void Database::insert(QString query) {
 }
 
 void Database::insertWithDatabase(QString query) {
-    this->db.exec(query);
+    QSqlDatabase db = QSqlDatabase::database();
+    db.exec(query);
 }
 
 void Database::insertInAFile(QString table, QString data) {

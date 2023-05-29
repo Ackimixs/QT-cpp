@@ -15,12 +15,10 @@
 
 class Database {
 private:
-    QSqlDatabase db;
+
     QSqlQuery q;
 
     bool dbOpen;
-
-    bool dbHaveAccess;
 
 public:
     Database();
