@@ -16,6 +16,10 @@ You can change the difficulty in the params
 (beginning, medium, hard)
 
 To install from scratch :
+install qt6.5 -> `sudo apt-get install qt6-base-dev qtchooser qmake6 qt6-base-dev-tools qt6-multimedia-dev`  
+ATTENTION : you need the multimedia package from qt6  
+To check qt version
+
 ```commandline
 git clone https://github.com/ackimixs/QT-cpp
 cd QT-cpp
