@@ -14,7 +14,7 @@ Player::Player(QString imageFileName) : QObject(), QGraphicsPixmapItem(), lifePo
 
     this->timeUntilNewShoot = QTime::currentTime();
 
-    this->timeBetween2Shoot = 1;
+    this->timeBetween2Shoot = 1000;
 
     this->isRateOfFireUp = false;
 
@@ -67,7 +67,7 @@ void Player::keyPressEvent(QKeyEvent *event) {
             player->play();
 
 
-            this->timeUntilNewShoot = QTime::currentTime().addSecs(this->timeBetween2Shoot);
+            this->timeUntilNewShoot = QTime::currentTime().addMSecs(this->timeBetween2Shoot);
 
             Bullet* bullet = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -90, 20, this->isSniperUp);
             Bullet* bulletLeft = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -95, 20, this->isSniperUp);
@@ -159,12 +159,12 @@ void Player::update() {
                 this->addLifePoint();
                 delete powerUp;
             } else if (type == PowerUp::RateOfFire) {
-                this->timeBetween2Shoot = 0;
+                this->timeBetween2Shoot = 200;
                 this->isRateOfFireUp = true;
                 this->timeUntilRateOfFire = QTime::currentTime().addSecs(5);
                 delete powerUp;
             } else if (type == PowerUp::Sniper) {
-                this->timeBetween2Shoot = 1;
+                this->timeBetween2Shoot = 1000;
                 this->isSniperUp = true;
                 this->timeUntilSniper = QTime::currentTime().addSecs(5);
                 delete powerUp;

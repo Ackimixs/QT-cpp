@@ -1,0 +1,6 @@
+- add params
+- add keyboard binding in the params
+- add difficulty in the params
+- beginning -> spawn is ok and plane don't move a lot
+- medium -> spawn increase and plane move
+- hard -> spawn * 2 + increase and plane move a lot
