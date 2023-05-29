@@ -7,6 +7,8 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
 
+configure_file(${CMAKE_SOURCE_DIR}/.env ${CMAKE_BINARY_DIR}/.env COPYONLY)
+
 find_package(Qt6 COMPONENTS
         Core
         Gui
@@ -17,6 +19,6 @@ find_package(Qt6 COMPONENTS
 
 file (GLOB_RECURSE sourceCode src/*.cpp src/*.h main.cpp)
 
-add_executable(CPP_QT_TPminiprojet ${sourceCode} res.qrc .env)
+add_executable(CPP_QT_TPminiprojet ${sourceCode} res.qrc)
 
 target_link_libraries(CPP_QT_TPminiprojet Qt6::Widgets Qt6::Multimedia Qt6::Sql)
