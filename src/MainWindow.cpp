@@ -43,7 +43,20 @@ MainWindow::~MainWindow(){
 
 void MainWindow::slot_aboutMenu(){
     QMessageBox msgBox;
-    msgBox.setText("A small QT/C++ projet...");
+
+    QString osName = QSysInfo::prettyProductName();
+    QString osVersion = QSysInfo::productVersion();
+    QString architecture = QSysInfo::currentCpuArchitecture();
+
+    msgBox.setWindowTitle("About");
+    msgBox.setText("Qt version" + QString(QT_VERSION_STR) + "\n" +
+                   "Operating System: " + osName + "\n" +
+                   "Operating System Version: " + osVersion + "\n" +
+                   "Architecture: " + architecture + "\n" +
+                   "Kernel : " + QSysInfo::kernelType() + " " + QSysInfo::kernelVersion() + "\n" +
+                   "Build : " + QSysInfo::buildAbi() + "\n" +
+                   "git repo : https://github.com/ackimixs/QT-cpp/tree/miniProjet");
+
     msgBox.setModal(true); // on souhaite que la fenetre soit modale i.e qu'on ne puisse plus cliquer ailleurs
     msgBox.exec();
 }

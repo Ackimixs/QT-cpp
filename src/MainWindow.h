@@ -8,6 +8,8 @@
 #include <QAction>
 #include <QMessageBox>
 #include <QDebug>
+#include <QSysInfo>
+
 
 #include "MyScene.h"
 #include "Player.h"
