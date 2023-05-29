@@ -17,7 +17,7 @@ find_package(Qt6 COMPONENTS
         Sql
         REQUIRED)
 
-file (GLOB_RECURSE sourceCode src/*.cpp src/*.h)
+file (GLOB_RECURSE sourceCode src/*.cpp src/*.h main.cpp)
 
 add_executable(CPP_QT_TPminiprojet ${sourceCode} res.qrc)
 

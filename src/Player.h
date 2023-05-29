@@ -8,6 +8,8 @@
 #include <QtDebug>
 #include <QGraphicsSceneMouseEvent>
 #include <QColor>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 #include "Logger.h"
 #include "Bullet.h"

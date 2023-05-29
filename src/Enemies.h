@@ -29,6 +29,7 @@ public slots:
 signals:
     void collisionWithPlayerSignal();
     void gameOverSignal();
+    void reachEndOfMapSignal();
 };
 
 

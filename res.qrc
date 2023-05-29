@@ -28,5 +28,11 @@
         <file>assets/img/powerup/pearl_blue.png</file>
         <file>assets/img/powerup/torpedo.png</file>
         <file>assets/img/powerup/sniper.png</file>
+
+
+
+        <file>assets/sounds/gameLevelSound.wav</file>
+        <file>assets/sounds/bulletShoot.wav</file>
+        <file>assets/sounds/extraBonus.wav</file>
     </qresource>
 </RCC>

@@ -12,6 +12,9 @@
 #include <QPushButton>
 #include <QGraphicsProxyWidget>
 #include <QTextItem>
+#include <QSoundEffect>
+#include <QMediaPlayer>
+#include <QAudioOutput>
 
 #include "Player.h"
 #include "Enemies.h"

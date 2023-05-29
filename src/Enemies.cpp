@@ -8,7 +8,7 @@ Enemies::Enemies(QString filename, QGraphicsPixmapItem *parent) : QObject(), QGr
 
     this->timer = new QTimer();
     connect(this->timer, SIGNAL(timeout()), this, SLOT(move()));
-    this->timer->start(100);
+    this->timer->start(50);
 }
 
 Enemies::~Enemies() {
@@ -24,11 +24,7 @@ void Enemies::move() {
         return;
     }
 
-    int newX = Utils::randInt(-4, 5);
-    int newY = Utils::randInt(-4, 5);
-
-    int rand = Utils::randInt(0, 17);
-    if (rand == 2) {
+    if (Utils::randInt(0, 31) == 2) {
         Bullet* bullet = new Bullet(":/assets/img/bullet/fire_ball_1.png", Bullet::enemieBullet, 90, 10);
         this->scene()->addItem(bullet);
         bullet->setPos(this->x() - this->pixmap().width() / 2, this->y());
@@ -37,7 +33,11 @@ void Enemies::move() {
         connect(this, SIGNAL(gameOverSignal()), bullet, SLOT(gameOverSlot()));
     }
 
-    this->setPos(this->x() + newX, this->y() + newY);
+    this->setPos(this->x() + Utils::randInt(-2, 3), this->y() + Utils::randInt(1, 5));
+
+    if (this->y() - this->pixmap().height() > this->scene()->height()) {
+        emit reachEndOfMapSignal();
+    }
 }
 
 void Enemies::collisionWithPlayerSlot() {

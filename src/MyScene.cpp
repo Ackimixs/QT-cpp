@@ -17,6 +17,14 @@ MyScene::MyScene(Database* db, QObject* parent) : QGraphicsScene(parent), gameOv
     connect(this->player, SIGNAL(gameOverFunc()), this, SLOT(gameOverFunc()));
     connect(this->player, SIGNAL(gameRestartSignal()), this, SLOT(restartSlots()));
 
+    QMediaPlayer* audioPlayer = new QMediaPlayer;
+    QAudioOutput* audioOutput = new QAudioOutput;
+    audioPlayer->setAudioOutput(audioOutput);
+    audioPlayer->setSource(QUrl("qrc:/assets/sounds/gameLevelSound.wav"));
+    audioOutput->setVolume(0.1f);
+    audioPlayer->setLoops(QMediaPlayer::Infinite);
+    audioPlayer->play();
+
 }
 
 MyScene::~MyScene() {
@@ -36,8 +44,10 @@ void MyScene::update() {
     int x = Utils::randInt(newEnemies->pixmap().width() + 10, this->width() - (newEnemies->pixmap().width() + 10));
     int y = Utils::randInt(20, 300);
 
+    connect(newEnemies, SIGNAL(reachEndOfMapSignal()), this, SLOT(handlePlayerCollision()));
     connect(newEnemies, SIGNAL(collisionWithPlayerSignal()), this, SLOT(handlePlayerCollision()));
     connect(this, SIGNAL(gameOverSignal()), newEnemies, SLOT(gameOverSlot()));
+
     newEnemies->setPos(x, y);
 
     this->timer->stop();

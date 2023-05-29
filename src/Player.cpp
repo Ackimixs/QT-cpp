@@ -58,6 +58,15 @@ void Player::keyPressEvent(QKeyEvent *event) {
     if (pressedKeys.contains(Qt::Key_Space)) {
 
         if (QTime::currentTime() > this->timeUntilNewShoot) {
+
+            QMediaPlayer* player = new QMediaPlayer;
+            QAudioOutput* audio = new QAudioOutput;
+            player->setAudioOutput(audio);
+            player->setSource(QUrl("qrc:/assets/sounds/bulletShoot.wav"));
+            audio->setVolume(0.2f);
+            player->play();
+
+
             this->timeUntilNewShoot = QTime::currentTime().addSecs(this->timeBetween2Shoot);
 
             Bullet* bullet = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -90, 20, this->isSniperUp);
@@ -136,6 +145,15 @@ void Player::update() {
     for (int i = 0, n = colliding_items.size(); i < n; ++i) {
         PowerUp* powerUp = dynamic_cast<PowerUp*>(colliding_items[i]);
         if (powerUp) {
+
+            QMediaPlayer* player = new QMediaPlayer;
+            QAudioOutput* audio = new QAudioOutput;
+            player->setAudioOutput(audio);
+            player->setSource(QUrl("qrc:/assets/sounds/extraBonus.wav"));
+            audio->setVolume(0.1f);
+            player->play();
+
+
             PowerUp::Type type = powerUp->getPowerUp();
             if (type == PowerUp::Heal) {
                 this->addLifePoint();
@@ -164,5 +182,4 @@ void Player::addLifePoint() {
  * faire un très grande map, avions qui décolle du sol va dans les nuages vas dans l'espace et passe dans un portail qui le tp en bas
  * quand le perso meurt il reviens en bas comme ca le widget game over reste tout le temps en bas
  * le reset le fait aussi aller en bas
- *
  */

@@ -41,7 +41,8 @@ void Bullet::move() {
             scene()->addItem(exp);
             exp->setPos(colliding_items[i]->x() - colliding_items[i]->boundingRect().width(), colliding_items[i]->y() - colliding_items[i]->boundingRect().height());
 
-            int nb = Utils::randInt(1, 4);
+            int nb = Utils::randInt(1, 21);
+
             if (nb == 1) {
                 HealPowerUp* healPowerUp = new HealPowerUp();
                 scene()->addItem(healPowerUp);
