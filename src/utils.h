@@ -58,12 +58,13 @@ namespace Utils {
         QString trimmedQuery = sqlQuery.trimmed();
 
         int selectPos = trimmedQuery.indexOf("SELECT");
+        int wherePos = trimmedQuery.indexOf("WHERE");
         int fromPos = trimmedQuery.indexOf("FROM");
         int orderPos = trimmedQuery.indexOf("ORDER BY");
 
         QString columns = trimmedQuery.mid(selectPos + 6, fromPos - selectPos - 6).trimmed();
 
-        QString table = trimmedQuery.mid(fromPos + 4, orderPos - fromPos - 4).trimmed();
+        QString table = trimmedQuery.mid(fromPos + 4, wherePos - fromPos - 4).trimmed();
 
         QStringList sorting = trimmedQuery.mid(orderPos + 8).trimmed().split(" ");
         QString orderColumn = sorting[0];

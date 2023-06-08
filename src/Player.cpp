@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player(QString imageFileName) : QObject(), QGraphicsPixmapItem(), lifePoint(3), score(0), speed(10), gameOver(false) {
+Player::Player(QString imageFileName, QGraphicsItem* parent) : QObject(), QGraphicsPixmapItem(parent), lifePoint(3), score(0), speed(10), gameOver(false), isGameStarted(false), difficulty(1) {
     QPixmap img(imageFileName);
     this->setPixmap(img.scaled(105, 105, Qt::KeepAspectRatio));
     Logger::log({"Player"}, Logger::Create, "Player created", true);
@@ -20,7 +20,6 @@ Player::Player(QString imageFileName) : QObject(), QGraphicsPixmapItem(), lifePo
 
     this->timer = new QTimer();
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
-    this->timer->start(100);
 
 }
 
@@ -29,6 +28,10 @@ Player::~Player() {
 }
 
 void Player::keyPressEvent(QKeyEvent *event) {
+    if (!isGameStarted) {
+        pressedKeys.clear();
+        return;
+    }
 
     if (gameOver) {
         pressedKeys.clear();
@@ -69,9 +72,9 @@ void Player::keyPressEvent(QKeyEvent *event) {
 
             this->timeUntilNewShoot = QTime::currentTime().addMSecs(this->timeBetween2Shoot);
 
-            Bullet* bullet = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -90, 20, this->isSniperUp);
-            Bullet* bulletLeft = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -95, 20, this->isSniperUp);
-            Bullet* bulletRight = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -85, 20, this->isSniperUp);
+            Bullet* bullet = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -90, 20, this->isSniperUp, this->difficulty);
+            Bullet* bulletLeft = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -95, 20, this->isSniperUp, this->difficulty);
+            Bullet* bulletRight = new Bullet(":/assets/img/bullet/torpedo.png", Bullet::playerBullet, -85, 20, this->isSniperUp, this->difficulty);
             this->scene()->addItem(bullet);
             this->scene()->addItem(bulletLeft);
             this->scene()->addItem(bulletRight);
@@ -131,7 +134,7 @@ void Player::update() {
     if (isRateOfFireUp) {
         if (QTime::currentTime() > timeUntilRateOfFire) {
             this->isRateOfFireUp = false;
-            this->timeBetween2Shoot = 1;
+            this->timeBetween2Shoot = 1000;
         }
     }
     if (isSniperUp) {
@@ -176,6 +179,15 @@ void Player::update() {
 void Player::addLifePoint() {
     this->lifePoint++;
     this->lifePointText->setPlainText("Life : " + QString::number(this->lifePoint));
+}
+
+void Player::startGame() {
+    this->timer->start(100);
+    this->isGameStarted = true;
+}
+
+void Player::setDifficulty(int difficulty) {
+    this->difficulty = difficulty;
 }
 
 /** TODO

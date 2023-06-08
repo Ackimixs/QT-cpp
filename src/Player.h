@@ -28,6 +28,8 @@ private:
 
     bool gameOver;
 
+    bool isGameStarted;
+
     QTime timeUntilNewShoot;
 
     qreal timeBetween2Shoot;
@@ -42,8 +44,10 @@ private:
 
     QTimer* timer;
 
+    int difficulty;
+
 public:
-    Player(QString imageFileName);
+    Player(QString imageFileName, QGraphicsItem* parent = nullptr);
 
     virtual ~Player();
 
@@ -65,6 +69,9 @@ public:
 
     qreal getScore() const { return this->score; };
 
+    void startGame();
+
+    void setDifficulty(int difficulty);
 public slots:
     void addPoint();
 

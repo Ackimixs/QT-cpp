@@ -15,6 +15,8 @@
 #include <QSoundEffect>
 #include <QMediaPlayer>
 #include <QAudioOutput>
+#include <QLineEdit>
+#include <QComboBox>
 
 #include "Player.h"
 #include "Enemies.h"
@@ -24,7 +26,7 @@ class MyScene : public QGraphicsScene {
     Q_OBJECT
 
 public:
-    MyScene(Database* db, QObject* parent = nullptr);
+    MyScene(QObject* parent = nullptr);
     virtual ~MyScene();
 
     void resizePlane(qreal sceneWidth, qreal sceneHeight);
@@ -33,7 +35,12 @@ public:
 
 private:
 
-    Database* db;
+    QLineEdit* playerNameInput;
+    QString playerName;
+    int difficultyLevel;
+    QPushButton* start;
+    QPushButton* quit;
+    QComboBox* difficulty;
 
     QTimer* timer;
     Player* player;
@@ -46,6 +53,7 @@ private:
     QWidget* gameOverWidget = nullptr;
     QVBoxLayout* gameOverLayout = nullptr;
     QPushButton* gameOverRestartButton = nullptr;
+    QPushButton* gameOverQuitButton = nullptr;
 
 public slots:
 
@@ -55,11 +63,20 @@ public slots:
 
     void gameOverFunc();
 
-    void restartSlots();
+    void restartSlots(int difficultyLevel = -1);
 
+    void startSlot();
+
+    void quitSlot();
+
+    void addEnemie();
 signals:
 
     void gameOverSignal();
+
+    void startGameSignal();
+
+    void quitGameSignal();
 };
 
 

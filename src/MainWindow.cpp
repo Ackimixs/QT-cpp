@@ -2,9 +2,7 @@
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
-    this->db = new Database();
-
-    this->mainScene = new MyScene(db);
+    this->mainScene = new MyScene();
 
     this->mainView = new QGraphicsView(this);
     this->mainView->setScene(mainScene);
@@ -29,12 +27,17 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     helpMenu = menuBar()->addMenu(tr("&Help"));
     QAction* actionHelp = new QAction(tr("&About"), this);
+    QAction* restartHelp = new QAction(tr("&Restart"), this);
     connect(actionHelp, SIGNAL(triggered()), this, SLOT(slot_aboutMenu()));
+    connect(restartHelp, SIGNAL(triggered()), this, SLOT(slot_restartMenu()));
     helpMenu->addAction(actionHelp);
+    helpMenu->addAction(restartHelp);
 
     this->timer = new QTimer();
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
-    this->timer->start(50);
+
+    connect(this->mainScene, SIGNAL(quitGameSignal()), this, SLOT(close()));
+    connect(this->mainScene, SIGNAL(startGameSignal()), this, SLOT(startGame()));
 }
 
 MainWindow::~MainWindow(){
@@ -61,6 +64,12 @@ void MainWindow::slot_aboutMenu(){
     msgBox.exec();
 }
 
+void MainWindow::slot_settingsMenu() {
+    SettingsDialog settingsDialog(this);
+    settingsDialog.setWindowTitle("Settings");
+    settingsDialog.exec();
+}
+
 void MainWindow::update() {
     if (this->actualCut > 256) {
         this->actualCut = 0;
@@ -71,4 +80,33 @@ void MainWindow::update() {
     this->mainScene->setBackgroundBrush(img.scaled(420, 840, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     this->actualCut++;
+}
+
+void MainWindow::startGame() {
+    this->timer->start(50);
+}
+
+void MainWindow::slot_restartMenu() {
+    this->restartDialog = new QDialog(this);
+    this->restartDialog->setWindowTitle("Restart");
+    this->restartDialog->setModal(true);
+    QVBoxLayout* dialogLayout = new QVBoxLayout(this->restartDialog);
+    QLabel* label = new QLabel("Are you sure you want to restart the game ?");
+    this->difficulty = new QComboBox();
+    this->difficulty->addItem("Easy");
+    this->difficulty->addItem("Medium");
+    this->difficulty->addItem("Hard");
+    label->setAlignment(Qt::AlignCenter);
+    dialogLayout->addWidget(label);
+    dialogLayout->addWidget(this->difficulty);
+    QPushButton* okButton = new QPushButton("restart");
+    connect(okButton, SIGNAL(pressed()), this, SLOT(restartSlots()));
+
+    dialogLayout->addWidget(okButton);
+    this->restartDialog->exec();
+}
+
+void MainWindow::restartSlots() {
+    this->mainScene->restartSlots(this->difficulty->currentIndex());
+    this->restartDialog->close();
 }

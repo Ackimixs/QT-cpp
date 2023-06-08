@@ -16,27 +16,31 @@
 class Database {
 private:
 
-    QSqlQuery q;
+    static QSqlQuery q;
 
-    bool dbOpen;
+    static bool dbOpen;
 
 public:
-    Database();
-    ~Database();
 
-    QList<QMap<QString, QString>> query (QString query);
+    static void setupDB();
 
-    void insert(QString query);
+    static void closeDB();
 
-    QList<QMap<QString, QString>> queryWIthDatabase(QString query);
+    static QList<QMap<QString, QString>> query (QString query);
 
-    QList<QMap<QString, QString>> queryInAFile(QString dataToSelect, QString table, QString orderBy = nullptr, QString columnToSort = "");
+    static void insert(QString query);
 
-    void insertInAFile(QString table, QString data);
+    static QList<QMap<QString, QString>> queryWIthDatabase(QString query);
 
-    void insertWithDatabase(QString query);
+//    static QList<QMap<QString, QString>> queryInAFile(QString dataToSelect, QString table, QString orderBy = nullptr, QString columnToSort = "");
 
-    void printList(QList<QMap<QString, QString>> listOfString);
+    static QList<QMap<QString, QString>> queryInAFile(const QString& query);
+
+
+    static void insertInAFile(QString table, QString data);
+
+    static void insertWithDatabase(QString query);
+
 };
 
 

@@ -22,7 +22,7 @@ public:
         playerBullet
     };
 
-    Bullet(QString filename, Type type = playerBullet, qreal angle = -90, qreal speed = 10, bool isSniper = false, QGraphicsPixmapItem* parent = nullptr);
+    Bullet(QString filename, Type type = playerBullet, qreal angle = -90, qreal speed = 10, bool isSniper = false, int difficulty = 1, QGraphicsPixmapItem* parent = nullptr);
 
     ~Bullet();
 
@@ -33,6 +33,7 @@ private:
     qreal type;
     bool gameOver;
     bool isSniper;
+    int difficulty;
 
 public slots:
     void move();

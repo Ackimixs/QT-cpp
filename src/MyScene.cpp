@@ -1,9 +1,10 @@
+#include <QCoreApplication>
 #include "MyScene.h"
 
-MyScene::MyScene(Database* db, QObject* parent) : QGraphicsScene(parent), gameOver(false), db(db) {
+MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
+
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    this->timer->start(3000);
 
     this->player = new Player(":/assets/img/player/Aircraft_07.png");
     this->player->setFlag(QGraphicsItem::ItemIsFocusable);
@@ -25,10 +26,42 @@ MyScene::MyScene(Database* db, QObject* parent) : QGraphicsScene(parent), gameOv
     audioPlayer->setLoops(QMediaPlayer::Infinite);
     audioPlayer->play();
 
+
+    this->difficulty = new QComboBox();
+    this->difficulty->addItem("easy");
+    this->difficulty->addItem("medium");
+    this->difficulty->addItem("hard");
+
+    this->playerNameInput = new QLineEdit();
+    this->start = new QPushButton("start");
+    this->quit = new QPushButton("quit");
+
+    this->playerNameInput->setPlaceholderText("username");
+    // Set the background color to transparent
+    QString styleSheet = "background-color: transparent; color: black;";
+    this->playerNameInput->setStyleSheet(styleSheet);
+
+    this->addWidget(this->playerNameInput);
+    this->addWidget(this->start);
+    this->addWidget(this->quit);
+    this->addWidget(this->difficulty);
+
+    int bxPos = 110;
+    this->playerNameInput->setGeometry(bxPos, 250, 200, 50);
+    this->difficulty->setGeometry(bxPos, 310, 200, 50);
+    this->start->setGeometry(bxPos, 370, 200, 50);
+    this->quit->setGeometry(bxPos, 430, 200, 50);
+
+    connect(this->start, SIGNAL(pressed()), this, SLOT(startSlot()));
+    connect(this->quit, SIGNAL(pressed()), this, SLOT(quitSlot()));
+
+    Database::setupDB();
+
 }
 
 MyScene::~MyScene() {
     this->timer->destroyed();
+    Database::closeDB();
 }
 
 void MyScene::update() {
@@ -38,23 +71,17 @@ void MyScene::update() {
         return;
     }
 
-    Enemies* newEnemies = new Enemies(":/assets/img/player/Aircraft_01.png");
-    this->addItem(newEnemies);
+    int nbEnemies = this->difficultyLevel == 2 ? 2 : 1;
 
-    int x = Utils::randInt(newEnemies->pixmap().width() + 10, this->width() - (newEnemies->pixmap().width() + 10));
-    int y = Utils::randInt(20, 300);
-
-    connect(newEnemies, SIGNAL(reachEndOfMapSignal()), this, SLOT(handlePlayerCollision()));
-    connect(newEnemies, SIGNAL(collisionWithPlayerSignal()), this, SLOT(handlePlayerCollision()));
-    connect(this, SIGNAL(gameOverSignal()), newEnemies, SLOT(gameOverSlot()));
-
-    newEnemies->setPos(x, y);
+    for (int i = 0; i < nbEnemies; i++) {
+        this->addEnemie();
+    }
 
     this->timer->stop();
-    if (this->player->getScore() > 0) {
-        this->timer->start(3000 - int(2600 * (1 - exp(-0.01 * this->player->getScore()))));
+    if (this->difficultyLevel == 0) {
+        this->timer->start(5000 - int(4500 * (1 - exp(-0.01 * this->player->getScore()))));
     } else {
-        this->timer->start(3000);
+        this->timer->start(2500 - int(2300 * (1 - exp(-0.01 * this->player->getScore()))));
     }
 }
 
@@ -81,22 +108,26 @@ void MyScene::gameOverFunc() {
     this->gameOverWidget->show();
 
     qreal score = this->player->getScore();
-    this->db->insert("INSERT INTO leaderboard (player, score) VALUES ('ackimixs', " + QString::number(score) +")");
+    Database::insert("INSERT INTO leaderboard (player, score, difficulty) VALUES ('"+ this->playerName +"', " + QString::number(score) +", "+ QString::number(this->difficultyLevel) +")");
 
     this->userScoreText->setText("your score : " + QString::number(score));
     this->leaderBoardText->setText("Leaderboard");
 
     this->gameOverLeaderBoard->clear();
 
-    QList<QMap<QString, QString>> data = this->db->query("SELECT * FROM leaderboard ORDER BY score DESC;");
+    QList<QMap<QString, QString>> data = Database::query("SELECT * FROM leaderboard WHERE difficulty = "+ QString::number(this->difficultyLevel) +" ORDER BY score DESC;");
     for (int i = 0; i < data.count(); i++) {
-        this->gameOverLeaderBoard->append(data[i].value("player") + " : " + data[i].value("score") + " - " + data[i].value("date").mid(0, 10));
+        this->gameOverLeaderBoard->append(data[i].value("player") + " : " + data[i].value("score") + " - " + data[i].value("date"));
     }
 
     this->gameOverWidget->raise();
 }
 
-void MyScene::restartSlots() {
+void MyScene::restartSlots(int difficultyLevel) {
+
+    if (difficultyLevel != -1) {
+        this->difficultyLevel = difficultyLevel;
+    }
 
     this->gameOverWidget->hide();
 
@@ -113,7 +144,11 @@ void MyScene::restartSlots() {
 
     this->gameOver = false;
 
-    this->timer->start(3000);
+    if (this->difficultyLevel == 0) {
+        this->timer->start(3000);
+    } else {
+        this->timer->start(1500);
+    }
 
     this->player->setFocus();
 
@@ -137,12 +172,71 @@ void MyScene::setupGameOverScreen() {
     this->userScoreText = new QLabel();
     this->leaderBoardText = new QLabel();
     this->gameOverRestartButton = new QPushButton("Restart !");
+    this->gameOverQuitButton = new QPushButton("Quit !");
     connect(this->gameOverRestartButton, SIGNAL(pressed()), this, SLOT(restartSlots()));
+    connect(this->gameOverQuitButton, SIGNAL(pressed()), this, SLOT(quitSlot()));
+
 
     this->gameOverLayout->addWidget(this->userScoreText);
     this->gameOverLayout->addWidget(this->leaderBoardText);
     this->gameOverLayout->addWidget(this->gameOverLeaderBoard);
     this->gameOverLayout->addWidget(this->gameOverRestartButton);
+    this->gameOverLayout->addWidget(this->gameOverQuitButton);
 
     this->gameOverWidget->hide();
+}
+
+void MyScene::startSlot() {
+
+
+    this->playerName = this->playerNameInput->text();
+    this->difficultyLevel = this->difficulty->currentIndex();
+
+    if (this->playerName.length() == 0) {
+        return;
+    } else {
+        Logger::log({"Game"}, Logger::Debug, "Player name : " + this->playerName + " difficulty : " + QString::number(this->difficultyLevel) , true);
+
+        switch (this->difficultyLevel) {
+            case 0:
+                this->player->setDifficulty(0);
+                this->timer->start(3000);
+                break;
+            case 1:
+                this->player->setDifficulty(1);
+                this->timer->start(1500);
+                break;
+            case 2:
+                this->player->setDifficulty(2);
+                this->timer->start(1500);
+                break;
+
+        }
+
+        this->playerNameInput->hide();
+        this->difficulty->hide();
+        this->start->hide();
+        this->quit->hide();
+        this->player->startGame();
+        this->player->setFocus();
+        emit startGameSignal();
+    }
+}
+
+void MyScene::quitSlot() {
+    emit quitGameSignal();
+}
+
+void MyScene::addEnemie() {
+    Enemies* newEnemies = new Enemies(":/assets/img/player/Aircraft_01.png");
+    this->addItem(newEnemies);
+
+    int x = Utils::randInt(newEnemies->pixmap().width() + 10, this->width() - (newEnemies->pixmap().width() + 10));
+    int y = Utils::randInt(20, 300);
+
+    connect(newEnemies, SIGNAL(reachEndOfMapSignal()), this, SLOT(handlePlayerCollision()));
+    connect(newEnemies, SIGNAL(collisionWithPlayerSignal()), this, SLOT(handlePlayerCollision()));
+    connect(this, SIGNAL(gameOverSignal()), newEnemies, SLOT(gameOverSlot()));
+
+    newEnemies->setPos(x, y);
 }

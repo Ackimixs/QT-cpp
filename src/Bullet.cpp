@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(QString filename, Type type, qreal angle, qreal speed, bool isSniper, QGraphicsPixmapItem* parent) : QObject(), QGraphicsPixmapItem(parent), angle(angle), speed(speed), type(type), gameOver(false), isSniper(isSniper) {
+Bullet::Bullet(QString filename, Type type, qreal angle, qreal speed, bool isSniper, int difficulty, QGraphicsPixmapItem* parent) : QObject(), QGraphicsPixmapItem(parent), angle(angle), speed(speed), type(type), gameOver(false), isSniper(isSniper), difficulty(difficulty) {
     //Logger::log({"Bullet"}, Logger::Create, "Bullet create", true);
     QPixmap img(filename);
 
@@ -41,7 +41,7 @@ void Bullet::move() {
             scene()->addItem(exp);
             exp->setPos(colliding_items[i]->x() - colliding_items[i]->boundingRect().width(), colliding_items[i]->y() - colliding_items[i]->boundingRect().height());
 
-            int nb = Utils::randInt(1, 21);
+            int nb = Utils::randInt(1, (21 * (this->difficulty+1)));
 
             if (nb == 1) {
                 HealPowerUp* healPowerUp = new HealPowerUp();

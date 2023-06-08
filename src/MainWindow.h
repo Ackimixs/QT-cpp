@@ -14,6 +14,7 @@
 #include "MyScene.h"
 #include "Player.h"
 #include "Database.h"
+#include "SettingsDialog.h"
 
 class MainWindow : public QMainWindow {
     Q_OBJECT
@@ -22,10 +23,12 @@ private :
     MyScene* mainScene;
     QGraphicsView* mainView;
     QMenu* helpMenu;
-    Database* db;
     QTimer* timer;
 
     int actualCut = 1;
+
+    QComboBox* difficulty;
+    QDialog* restartDialog;
 
 public:
     MainWindow(QWidget* parent = nullptr);
@@ -34,7 +37,15 @@ public:
 public slots:
     void slot_aboutMenu();
 
+    void slot_settingsMenu();
+
+    void slot_restartMenu();
+
     void update();
+
+    void startGame();
+
+    void restartSlots();
 };
 
 
