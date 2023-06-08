@@ -71,9 +71,9 @@ Music :
 #### game assets :
 
 - [enemies ship by Pixel-boy](https://www.patreon.com/SparklinLabs?ty=h)
-- [plane](https://opengameart.org/content/airplane-sprites)
+- [background](https://www.gamedeveloperstudio.com)
 #### Sounds :
 
-- [bullet shoot](https://freesound.org/people/ProjectsU012/sounds/333785/)
-- [game level](https://freesound.org/people/ProjectsU012/sounds/341695/)
-- [extra bonus](https://freesound.org/people/ProjectsU012/sounds/341695/)
+- [bullet shoot](https://mixkit.co/free-sound-effects/)
+- [game level](https://mixkit.co/free-sound-effects/)
+- [extra bonus](https://mixkit.co/free-sound-effects/)
