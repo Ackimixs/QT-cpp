@@ -2,7 +2,7 @@
 
 Player::Player(QString imageFileName, QGraphicsItem* parent) : QObject(), QGraphicsPixmapItem(parent), lifePoint(3), score(0), speed(10), gameOver(false), isGameStarted(false), difficulty(1) {
     QPixmap img(imageFileName);
-    this->setPixmap(img.scaled(105, 105, Qt::KeepAspectRatio));
+    this->setPixmap(img.scaled(70, 70, Qt::KeepAspectRatio));
     Logger::log({"Player"}, Logger::Create, "Player created", true);
     this->lifePointText = new QGraphicsTextItem();
     this->lifePointText->setPlainText("Life : " + QString::number(this->lifePoint));

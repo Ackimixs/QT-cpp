@@ -41,7 +41,15 @@ void Bullet::move() {
             scene()->addItem(exp);
             exp->setPos(colliding_items[i]->x() - colliding_items[i]->boundingRect().width(), colliding_items[i]->y() - colliding_items[i]->boundingRect().height());
 
-            int nb = Utils::randInt(1, (21 * (this->difficulty+1)));
+            qreal x = 1;
+            if (this->difficulty == GameLevel::HARD || this->difficulty == GameLevel::IMPOSSIBLE) {
+                x = 2;
+            } else if (this->difficulty == GameLevel::AREUOK) {
+                x = 3;
+            } else if (this->difficulty == GameLevel::POWERUP) {
+                x = 0.2;
+            }
+            int nb = Utils::randInt(1, int(30 * x));
 
             if (nb == 1) {
                 HealPowerUp* healPowerUp = new HealPowerUp();

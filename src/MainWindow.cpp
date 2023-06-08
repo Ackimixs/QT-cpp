@@ -12,12 +12,14 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 
     this->mainScene->setSceneRect(0, 0, 400, 800);
 
-    QImage img = Utils::cutImage(":/assets/img/background/backgroundTest.png", 800, 128, 1);
+    this->actualCut = 1;
+    this->maxCut = 256;
+    this->backgroundImg = new QImage(":/assets/img/background/backgroundTest.png");
 
-    this->mainScene->setBackgroundBrush(img.scaled(420, 840, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    this->mainScene->setBackgroundBrush(Utils::cutImage(*this->backgroundImg, 800, this->maxCut, this->actualCut).scaled(420, 840, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     this->setCentralWidget(mainView);
-    this->setWindowTitle("My main window");
+    this->setWindowTitle("Cyber space");
 
     this->setFixedSize(420, 840);
 
@@ -71,13 +73,11 @@ void MainWindow::slot_settingsMenu() {
 }
 
 void MainWindow::update() {
-    if (this->actualCut > 256) {
+    if (this->actualCut > this->maxCut) {
         this->actualCut = 0;
     }
 
-    QImage img = Utils::cutImage(":/assets/img/background/backgroundTest.png", 800, 256, actualCut);
-
-    this->mainScene->setBackgroundBrush(img.scaled(420, 840, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+    this->mainScene->setBackgroundBrush(Utils::cutImage(*this->backgroundImg, 800, this->maxCut, this->actualCut).scaled(420, 840, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
 
     this->actualCut++;
 }
@@ -96,6 +96,9 @@ void MainWindow::slot_restartMenu() {
     this->difficulty->addItem("Easy");
     this->difficulty->addItem("Medium");
     this->difficulty->addItem("Hard");
+    this->difficulty->addItem("Impossible");
+    this->difficulty->addItem("Are u ok ?");
+    this->difficulty->addItem("Power Up");
     label->setAlignment(Qt::AlignCenter);
     dialogLayout->addWidget(label);
     dialogLayout->addWidget(this->difficulty);

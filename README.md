@@ -20,6 +20,10 @@ install qt6.5 -> `sudo apt-get install qt6-base-dev qtchooser qmake6 qt6-base-de
 ATTENTION : you need the multimedia package from qt6  
 To check qt version
 
+If you want to active developer log mode add in main.cpp :
+`Logger::isDevMode=true` at the beginning of the main func
+
+
 ```commandline
 git clone https://github.com/ackimixs/QT-cpp
 cd QT-cpp
@@ -29,8 +33,27 @@ make
 ./CPP_QT_TPminiprojet
 ```
 
-If you want to active developer log mode add in main.cpp :
-`Logger::isDevMode=true` at the beginning of the main func
+### Setup postgresql
+the project use postgresql to store the leaderboard or if you don't want to install it you can use the file system
+```commandline
+sudo apt-get install postgresql postgresql-contrib
+sudo -u postgres psql
+```
+```sql
+CREATE USER scroller WITH ENCRYPTED PASSWORD 'scroller';
+CREATE DATABASE scroller owner scroller;
+```
+fill the .env file in the root of the projet
+```dotenv
+DB_HOSTNAME=localhost
+DB_DBNAME=scoller
+DB_USERNAME=scroller
+DB_PASSWORD=scroller
+```
+```commandline
+psql -U scroller -d scroller -f ./sql/model.sql
+psql -U scroller -d scroller -f ./sql/data.sql
+```
 
 ### Optional functionality
 PowerUp:
@@ -45,7 +68,12 @@ Music :
 
 
 ### Credit  
-game assets :
--
-Sounds :
--
+#### game assets :
+
+- [enemies ship by Pixel-boy](https://www.patreon.com/SparklinLabs?ty=h)
+- [plane](https://opengameart.org/content/airplane-sprites)
+#### Sounds :
+
+- [bullet shoot](https://freesound.org/people/ProjectsU012/sounds/333785/)
+- [game level](https://freesound.org/people/ProjectsU012/sounds/341695/)
+- [extra bonus](https://freesound.org/people/ProjectsU012/sounds/341695/)

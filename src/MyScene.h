@@ -26,6 +26,7 @@ class MyScene : public QGraphicsScene {
     Q_OBJECT
 
 public:
+
     MyScene(QObject* parent = nullptr);
     virtual ~MyScene();
 

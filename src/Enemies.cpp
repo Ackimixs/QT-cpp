@@ -3,7 +3,8 @@
 Enemies::Enemies(QString filename, QGraphicsPixmapItem *parent) : QObject(), QGraphicsPixmapItem(parent), gameOver(false) {
     //Logger::log({"Enemies"}, Logger::Create, "Creating enemies", true);
     QPixmap img(filename);
-    this->setPixmap(img.scaled(70, 70, Qt::KeepAspectRatio));
+
+    this->setPixmap(img.scaled(50, 50, Qt::KeepAspectRatio));
     this->setRotation(180);
 
     this->timer = new QTimer();
@@ -24,7 +25,7 @@ void Enemies::move() {
         return;
     }
 
-    if (Utils::randInt(0, 31) == 2) {
+    if (Utils::randInt(0, 50) == 2) {
         Bullet* bullet = new Bullet(":/assets/img/bullet/fire_ball_1.png", Bullet::enemieBullet, 90, 10);
         this->scene()->addItem(bullet);
         bullet->setPos(this->x() - this->pixmap().width() / 2, this->y());

@@ -25,7 +25,9 @@ private :
     QMenu* helpMenu;
     QTimer* timer;
 
-    int actualCut = 1;
+    int actualCut;
+    int maxCut;
+    QImage* backgroundImg;
 
     QComboBox* difficulty;
     QDialog* restartDialog;

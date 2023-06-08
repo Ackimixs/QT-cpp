@@ -5,12 +5,21 @@
         <file>assets/img/player/plane_1_pink_reverse.png</file>
         <file>assets/img/player/Aircraft_07.png</file>
         <file>assets/img/player/Aircraft_01.png</file>
+        <file>assets/img/player/11.png</file>
 
         <file>assets/img/bullet/torpedo.png</file>
         <file>assets/img/bullet/fire_ball_1.png</file>
 
         <file>assets/img/background/sky_background_green_hills.png</file>
         <file>assets/img/background/backgroundTest.png</file>
+        <file>assets/img/background/backgroundWTF.png</file>
+        <file>assets/img/background/Black_hole.png</file>
+        <file>assets/img/background/Meteor2.png</file>
+        <file>assets/img/background/Moon.png</file>
+        <file>assets/img/background/Planet1.png</file>
+        <file>assets/img/background/Planet2.png</file>
+        <file>assets/img/background/Star.png</file>
+        <file>assets/img/background/Star2.png</file>
 
         <file>assets/img/Explosion/explosion_01.png</file>
         <file>assets/img/Explosion/explosion_02.png</file>
@@ -29,6 +38,15 @@
         <file>assets/img/powerup/torpedo.png</file>
         <file>assets/img/powerup/sniper.png</file>
 
+        <file>assets/img/enemies/1.png</file>
+        <file>assets/img/enemies/2.png</file>
+        <file>assets/img/enemies/3.png</file>
+        <file>assets/img/enemies/4.png</file>
+        <file>assets/img/enemies/5.png</file>
+        <file>assets/img/enemies/6.png</file>
+        <file>assets/img/enemies/7.png</file>
+        <file>assets/img/enemies/8.png</file>
+        <file>assets/img/enemies/9.png</file>
 
 
         <file>assets/sounds/gameLevelSound.wav</file>

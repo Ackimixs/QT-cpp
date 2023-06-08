@@ -7,15 +7,38 @@
 #include <QPixmap>
 #include <QPainter>
 
+enum GameLevel {
+    EASY = 0,
+    MEDIUM = 1,
+    HARD = 2,
+    IMPOSSIBLE = 3,
+    AREUOK = 4,
+    POWERUP = 5
+};
+
 namespace Utils {
+
+    /**
+     * @return a string representing the current date and time in the format "yyyy-MM-dd HH:mm:ss"
+     */
     static QString getCurrentDateTime() {
         return QDateTime::currentDateTime().toString("yyyy-MM-dd HH:mm:ss");
     }
 
+    /**
+     * @param low (include)
+     * @param high (exclude)
+     * @return a number from low and high - 1
+     */
     static int randInt(int low, int high) {
         return QRandomGenerator::global()->bounded(low, high);
     }
 
+    /**
+     * @param pixmap
+     * @param opacity from 0.1 - 1.0
+     * @return a new pixmap with the opacity applied
+     */
     static QPixmap addTransparencyToPixmap(const QPixmap& pixmap, qreal opacity = 0.5) {
         QPixmap resultPixmap(pixmap.size());
         resultPixmap.fill(Qt::transparent);
@@ -41,18 +64,58 @@ namespace Utils {
     }
 
 
-    static QImage cutImage(const QString& imagePath, int finalHeight, int numCuts, int currentCut) {
-        QImage baseImage(imagePath);
+    static QImage cutImage(const QImage& img, int finalHeight, int numCuts, int currentCut) {
 
-        int width = baseImage.width();
-        int height = baseImage.height();
+        int width = img.width();
+        int height = img.height();
 
         int nbPart = int((height - 800) / numCuts);
 
-        QImage cutImage = baseImage.copy(0, nbPart * (numCuts - currentCut), width, finalHeight);
+        QImage cutImage = img.copy(0, nbPart * (numCuts - currentCut), width, finalHeight);
+
+        QImage starImage(":/assets/img/star.png");
+
+        QPainter painter(&cutImage);
 
         return cutImage;
     }
+
+    static void addStars(QImage& image, int numStars) {
+            QImage starImage(":/assets/img/background/Star.png");
+
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<int> xDist(0, image.width() - starImage.width());
+            std::uniform_int_distribution<int> yDist(0, image.height() - starImage.height());
+
+            QPainter painter(&image);
+            for (int i = 0; i < numStars; ++i)
+            {
+                int x = xDist(gen);
+                int y = yDist(gen);
+                painter.drawImage(x, y, starImage);
+            }
+            painter.end();
+    }
+
+    static void addPlanete(QImage& image, int numStars) {
+            QImage planeteImg(":/assets/img/background/Planete1.png");
+
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_int_distribution<int> xDist(0, image.width() - planeteImg.width());
+            std::uniform_int_distribution<int> yDist(0, image.height() - planeteImg.height());
+
+            QPainter painter(&image);
+            for (int i = 0; i < numStars; ++i)
+            {
+                int x = xDist(gen);
+                int y = yDist(gen);
+                painter.drawImage(x, y, planeteImg);
+            }
+            painter.end();
+    }
+
 
     static QList<QString> parseSqlQuery(const QString& sqlQuery) {
         QString trimmedQuery = sqlQuery.trimmed();

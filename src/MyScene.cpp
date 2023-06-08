@@ -6,7 +6,7 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 
-    this->player = new Player(":/assets/img/player/Aircraft_07.png");
+    this->player = new Player(":/assets/img/player/11.png");
     this->player->setFlag(QGraphicsItem::ItemIsFocusable);
     this->player->setFocus();
     this->addItem(this->player);
@@ -31,6 +31,9 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
     this->difficulty->addItem("easy");
     this->difficulty->addItem("medium");
     this->difficulty->addItem("hard");
+    this->difficulty->addItem("impossible");
+    this->difficulty->addItem("Are u ok ?");
+    this->difficulty->addItem("power up mode");
 
     this->playerNameInput = new QLineEdit();
     this->start = new QPushButton("start");
@@ -71,17 +74,30 @@ void MyScene::update() {
         return;
     }
 
-    int nbEnemies = this->difficultyLevel == 2 ? 2 : 1;
+    int nbEnemies = 1;
+    if (this->difficultyLevel == GameLevel::HARD || this->difficultyLevel == GameLevel::POWERUP || this->difficultyLevel == GameLevel::IMPOSSIBLE) {
+        nbEnemies = 2;
+    } else if (this->difficultyLevel == GameLevel::AREUOK) {
+        nbEnemies = 3;
+    }
 
     for (int i = 0; i < nbEnemies; i++) {
         this->addEnemie();
     }
 
     this->timer->stop();
-    if (this->difficultyLevel == 0) {
-        this->timer->start(5000 - int(4500 * (1 - exp(-0.01 * this->player->getScore()))));
-    } else {
-        this->timer->start(2500 - int(2300 * (1 - exp(-0.01 * this->player->getScore()))));
+    if (this->difficultyLevel == GameLevel::EASY) {
+        this->timer->start(4000 - int(3700 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else if (this->difficultyLevel == GameLevel::MEDIUM) {
+        this->timer->start(3000 - int(2800 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else if (this->difficultyLevel == GameLevel::HARD) {
+        this->timer->start(2000 - int(1800 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else if (this->difficultyLevel == GameLevel::IMPOSSIBLE) {
+        this->timer->start(1000 - int(900 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else if (this->difficultyLevel == GameLevel::AREUOK) {
+        this->timer->start(500 - int(400 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else if (this->difficultyLevel == GameLevel::POWERUP) {
+        this->timer->start(1500 - int(1300 * (1 - exp(-0.01 * this->player->getScore()))));
     }
 }
 
@@ -117,7 +133,7 @@ void MyScene::gameOverFunc() {
 
     QList<QMap<QString, QString>> data = Database::query("SELECT * FROM leaderboard WHERE difficulty = "+ QString::number(this->difficultyLevel) +" ORDER BY score DESC;");
     for (int i = 0; i < data.count(); i++) {
-        this->gameOverLeaderBoard->append(data[i].value("player") + " : " + data[i].value("score") + " - " + data[i].value("date"));
+        this->gameOverLeaderBoard->append(data[i].value("player") + " : " + data[i].value("score") + " - " + data[i].value("date").mid(0, 10));
     }
 
     this->gameOverWidget->raise();
@@ -127,6 +143,7 @@ void MyScene::restartSlots(int difficultyLevel) {
 
     if (difficultyLevel != -1) {
         this->difficultyLevel = difficultyLevel;
+        this->player->setDifficulty(difficultyLevel);
     }
 
     this->gameOverWidget->hide();
@@ -198,19 +215,30 @@ void MyScene::startSlot() {
         Logger::log({"Game"}, Logger::Debug, "Player name : " + this->playerName + " difficulty : " + QString::number(this->difficultyLevel) , true);
 
         switch (this->difficultyLevel) {
-            case 0:
+            case GameLevel::EASY:
                 this->player->setDifficulty(0);
+                this->timer->start(4000);
+                break;
+            case GameLevel::MEDIUM:
+                this->player->setDifficulty(1);
                 this->timer->start(3000);
                 break;
-            case 1:
-                this->player->setDifficulty(1);
-                this->timer->start(1500);
-                break;
-            case 2:
+            case GameLevel::HARD:
                 this->player->setDifficulty(2);
+                this->timer->start(2000);
+                break;
+            case GameLevel::IMPOSSIBLE:
+                this->player->setDifficulty(3);
+                this->timer->start(1000);
+                break;
+            case GameLevel::AREUOK:
+                this->player->setDifficulty(4);
+                this->timer->start(500);
+                break;
+            case GameLevel::POWERUP:
+                this->player->setDifficulty(5);
                 this->timer->start(1500);
                 break;
-
         }
 
         this->playerNameInput->hide();
@@ -228,7 +256,8 @@ void MyScene::quitSlot() {
 }
 
 void MyScene::addEnemie() {
-    Enemies* newEnemies = new Enemies(":/assets/img/player/Aircraft_01.png");
+    QString path = ":/assets/img/enemies/" + QString::number(Utils::randInt(1, 10)) + ".png";
+    Enemies* newEnemies = new Enemies(path);
     this->addItem(newEnemies);
 
     int x = Utils::randInt(newEnemies->pixmap().width() + 10, this->width() - (newEnemies->pixmap().width() + 10));
