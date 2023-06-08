@@ -18,7 +18,7 @@ You can change the difficulty in the params
 To install from scratch :
 install qt6.5 -> `sudo apt-get install qt6-base-dev qtchooser qmake6 qt6-base-dev-tools qt6-multimedia-dev`  
 ATTENTION : you need the multimedia package from qt6  
-To check qt version
+To check qt version run `qmake -v`
 
 If you want to active developer log mode add in main.cpp :
 `Logger::isDevMode=true` at the beginning of the main func
@@ -67,12 +67,12 @@ Music :
 - extra bonus
 
 
-### Credit  
-#### game assets :
+# Credit  
+## game assets :
 
 - [enemies ship by Pixel-boy](https://www.patreon.com/SparklinLabs?ty=h)
 - [background](https://www.gamedeveloperstudio.com)
-#### Sounds :
+## Sounds :
 
 - [bullet shoot](https://mixkit.co/free-sound-effects/)
 - [game level](https://mixkit.co/free-sound-effects/)
