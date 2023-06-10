@@ -5,18 +5,33 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QString>
+#include <QPushButton>
+#include <QMessageBox>
+#include <QApplication>
+#include <QKeyEvent>
+
+#include "keyPressedDialogRecorder.h"
+#include "Database.h"
+#include "settings.h"
+#include "Logger.h"
 
 class MappingLayout : public QHBoxLayout {
+    Q_OBJECT
 public:
     MappingLayout(QString label);
-    void setText(QString text);
-    void setInputText(QString text);
-    QString getText();
 
-private:
+protected:
+
+    QString keySettings;
+
     QLabel* mappingLabel1;
-    QLineEdit* mappingLineEdit1;
+    QPushButton* recordButton;
+    keyPressedDialogRecorder* dialog;
 
+private slots:
+    void recordKeyInfo();
+
+    void keyChanged(int key);
 };
 
 

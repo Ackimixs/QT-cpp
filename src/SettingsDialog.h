@@ -12,6 +12,7 @@
 #include "MappingLayout.h"
 
 class SettingsDialog : public QDialog {
+    Q_OBJECT
 public:
     SettingsDialog(QWidget* parent = nullptr);
 
@@ -22,8 +23,10 @@ private:
     MappingLayout* rightKey;
     MappingLayout* backwardKey;
     MappingLayout* leftKey;
+    MappingLayout* spaceKey;
+    MappingLayout* restartKey;
 
-private slots:
+public slots:
     void saveSettings();
 };
 

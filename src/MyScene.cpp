@@ -6,7 +6,7 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
     this->timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
 
-    this->player = new Player(":/assets/img/player/11.png");
+    this->player = new Player(":/assets/img/player/" + SettingsManager::getInstance().value("selectedShip").toString() + ".png");
     this->player->setFlag(QGraphicsItem::ItemIsFocusable);
     this->player->setFocus();
     this->addItem(this->player);
@@ -87,9 +87,9 @@ void MyScene::update() {
 
     this->timer->stop();
     if (this->difficultyLevel == GameLevel::EASY) {
-        this->timer->start(4000 - int(3700 * (1 - exp(-0.01 * this->player->getScore()))));
-    } else if (this->difficultyLevel == GameLevel::MEDIUM) {
         this->timer->start(3000 - int(2800 * (1 - exp(-0.01 * this->player->getScore()))));
+    } else if (this->difficultyLevel == GameLevel::MEDIUM) {
+        this->timer->start(2500 - int(2300 * (1 - exp(-0.01 * this->player->getScore()))));
     } else if (this->difficultyLevel == GameLevel::HARD) {
         this->timer->start(2000 - int(1800 * (1 - exp(-0.01 * this->player->getScore()))));
     } else if (this->difficultyLevel == GameLevel::IMPOSSIBLE) {
@@ -217,11 +217,11 @@ void MyScene::startSlot() {
         switch (this->difficultyLevel) {
             case GameLevel::EASY:
                 this->player->setDifficulty(0);
-                this->timer->start(4000);
+                this->timer->start(3000);
                 break;
             case GameLevel::MEDIUM:
                 this->player->setDifficulty(1);
-                this->timer->start(3000);
+                this->timer->start(2500);
                 break;
             case GameLevel::HARD:
                 this->player->setDifficulty(2);
@@ -256,7 +256,7 @@ void MyScene::quitSlot() {
 }
 
 void MyScene::addEnemie() {
-    QString path = ":/assets/img/enemies/" + QString::number(Utils::randInt(1, 10)) + ".png";
+    QString path = ":/assets/img/enemies/" + QString::number(Utils::randInt(2, 5)) + ".png";
     Enemies* newEnemies = new Enemies(path);
     this->addItem(newEnemies);
 
@@ -269,3 +269,10 @@ void MyScene::addEnemie() {
 
     newEnemies->setPos(x, y);
 }
+
+/**
+ * TODO
+ * shop :
+ * db table money, c'est pas beau mais pour ce projet on va utiliser une table money mais avec une seul row qui serais le user sur le pc
+ * et on va utiliser la table money et faire un widget pour acheter des skins (et des powerups ?)
+*/

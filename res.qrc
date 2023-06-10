@@ -1,11 +1,15 @@
 <!DOCTYPE RCC>
 <RCC version="1.0">
     <qresource>
-        <file>assets/img/player/plane_1_blue.png</file>
-        <file>assets/img/player/plane_1_pink_reverse.png</file>
-        <file>assets/img/player/Aircraft_07.png</file>
-        <file>assets/img/player/Aircraft_01.png</file>
-        <file>assets/img/player/11.png</file>
+        <file>assets/img/player/1.png</file>
+        <file>assets/img/player/2.png</file>
+        <file>assets/img/player/3.png</file>
+        <file>assets/img/player/4.png</file>
+        <file>assets/img/player/5.png</file>
+        <file>assets/img/player/6.png</file>
+        <file>assets/img/player/7.png</file>
+        <file>assets/img/player/8.png</file>
+        <file>assets/img/player/9.png</file>
 
         <file>assets/img/bullet/torpedo.png</file>
         <file>assets/img/bullet/fire_ball_1.png</file>
@@ -38,15 +42,9 @@
         <file>assets/img/powerup/torpedo.png</file>
         <file>assets/img/powerup/sniper.png</file>
 
-        <file>assets/img/enemies/1.png</file>
         <file>assets/img/enemies/2.png</file>
         <file>assets/img/enemies/3.png</file>
         <file>assets/img/enemies/4.png</file>
-        <file>assets/img/enemies/5.png</file>
-        <file>assets/img/enemies/6.png</file>
-        <file>assets/img/enemies/7.png</file>
-        <file>assets/img/enemies/8.png</file>
-        <file>assets/img/enemies/9.png</file>
 
 
         <file>assets/sounds/gameLevelSound.wav</file>

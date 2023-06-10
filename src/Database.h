@@ -32,10 +32,7 @@ public:
 
     static QList<QMap<QString, QString>> queryWIthDatabase(QString query);
 
-//    static QList<QMap<QString, QString>> queryInAFile(QString dataToSelect, QString table, QString orderBy = nullptr, QString columnToSort = "");
-
     static QList<QMap<QString, QString>> queryInAFile(const QString& query);
-
 
     static void insertInAFile(QString table, QString data);
 

@@ -44,21 +44,20 @@ void Player::keyPressEvent(QKeyEvent *event) {
 
     pressedKeys.insert(event->key());
 
-    if (pressedKeys.contains(Qt::Key_Down) && (this->y() + this->pixmap().height()) < this->scene()->height()) {
+    if (pressedKeys.contains(SettingsManager::getInstance().value("backward").toInt()) && (this->y() + this->pixmap().height()) < this->scene()->height()) {
         this->setPos(this->x(), this->y() + this->speed);
     }
-    if (pressedKeys.contains(Qt::Key_Up) && this->x() > 0) {
+    if (pressedKeys.contains(SettingsManager::getInstance().value("forward").toInt()) && this->x() > 0) {
         this->setPos(this->x(), this->y() - this->speed);
     }
-    if (pressedKeys.contains(Qt::Key_Left) && this->x() > 0) {
+    if (pressedKeys.contains(SettingsManager::getInstance().value("left").toInt()) && this->x() > 0) {
         this->setPos(this->x() - this->speed, this->y());
     }
-    if (pressedKeys.contains(Qt::Key_Right) && (this->x() + this->pixmap().width()) < this->scene()->width()) {
+    if (pressedKeys.contains(SettingsManager::getInstance().value("right").toInt()) && (this->x() + this->pixmap().width()) < this->scene()->width()) {
         this->setPos(this->x() + this->speed, this->y());
     }
 
-
-    if (pressedKeys.contains(Qt::Key_Space)) {
+    if (pressedKeys.contains(SettingsManager::getInstance().value("space").toInt())) {
 
         if (QTime::currentTime() > this->timeUntilNewShoot) {
 
@@ -88,7 +87,7 @@ void Player::keyPressEvent(QKeyEvent *event) {
         }
     }
 
-    if (pressedKeys.contains(Qt::Key_R)) {
+    if (pressedKeys.contains(SettingsManager::getInstance().value("restart").toInt())) {
         Logger::log({"Game"}, Logger::Debug, "Player ask for restart", true);
         emit gameRestartSignal();
     }

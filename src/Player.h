@@ -14,6 +14,7 @@
 #include "Logger.h"
 #include "Bullet.h"
 #include "PowerUp.h"
+#include "settings.h"
 
 class Player : public QObject, public QGraphicsPixmapItem {
     Q_OBJECT

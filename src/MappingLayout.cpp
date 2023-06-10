@@ -1,20 +1,32 @@
 #include "MappingLayout.h"
 
 MappingLayout::MappingLayout(QString label) : QHBoxLayout() {
-    this->mappingLineEdit1 = new QLineEdit();
+    this->keySettings = label;
     this->mappingLabel1 = new QLabel(label);
-    this->addWidget(this->mappingLabel1);
-    this->addWidget(this->mappingLineEdit1);
+    this->recordButton = new QPushButton("Record");
+    if (SettingsManager::getInstance().contains(this->keySettings)) {
+        QString keyStr =  QKeySequence(SettingsManager::getInstance().value(this->keySettings).toInt()).toString();
+        this->recordButton->setText(keyStr);
+    }
+    this->dialog = new keyPressedDialogRecorder();
+
+    this->addWidget(mappingLabel1);
+    this->addWidget(recordButton);
+
+    connect(this->recordButton, SIGNAL(pressed()), this, SLOT(recordKeyInfo()));
+    connect(this->dialog, SIGNAL(keyChanged(int)), this, SLOT(keyChanged(int)));
 }
 
-void MappingLayout::setText(QString text) {
-    this->mappingLabel1->setText(text);
+void MappingLayout::recordKeyInfo() {
+    this->dialog->exec();
 }
 
-QString MappingLayout::getText() {
-    return this->mappingLineEdit1->text();
-}
+void MappingLayout::keyChanged(int key) {
+    this->recordButton->setText(QKeySequence(key).toString());
 
-void MappingLayout::setInputText(QString text) {
-    this->mappingLineEdit1->setText(text);
+    QSettings& settings = SettingsManager::getInstance();
+
+    settings.setValue(this->keySettings, key);
+
+    Logger::log({"Key changed"}, Logger::Debug, "key " + this->keySettings + " changed to " + QKeySequence(key).toString(), true);
 }

@@ -167,6 +167,32 @@ namespace Utils {
         return {table.split(' ')[0], values};
     }
 
+    static QList<QString> parseUpdateQuery(QString query) {
+        // Remove leading and trailing whitespaces from the query
+        QString trimmedQuery = query.trimmed();
+
+        // Find the position of keywords in the query
+        int setPos = trimmedQuery.indexOf("SET");
+        int wherePos = trimmedQuery.indexOf("WHERE");
+
+        // Extract the table name
+        QString table = trimmedQuery.mid(6, setPos - 6).trimmed();
+
+        // Extract the column-value pairs
+        QString values = trimmedQuery.mid(setPos + 3, wherePos - setPos - 3).trimmed();
+
+        // Remove parentheses from the values part
+        values.remove('(');
+        values.remove(')');
+
+        // Remove single quotes around each value
+        values = values.simplified();
+        values = values.replace('\'', "");
+
+        return {table, values};
+        // TODO change it
+    }
+
     static bool compareMaps(const QMap<QString, QString>& map1, const QMap<QString, QString>& map2, QString columnToSort, QString orderBy) {
         QString score1 = map1.value(columnToSort);
         QString score2 = map2.value(columnToSort);

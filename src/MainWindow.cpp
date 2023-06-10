@@ -30,10 +30,13 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     helpMenu = menuBar()->addMenu(tr("&Help"));
     QAction* actionHelp = new QAction(tr("&About"), this);
     QAction* restartHelp = new QAction(tr("&Restart"), this);
+    QAction* settingsHelp = new QAction(tr("&Settings"), this);
     connect(actionHelp, SIGNAL(triggered()), this, SLOT(slot_aboutMenu()));
     connect(restartHelp, SIGNAL(triggered()), this, SLOT(slot_restartMenu()));
+    connect(settingsHelp, SIGNAL(triggered()), this, SLOT(slot_settingsMenu()));
     helpMenu->addAction(actionHelp);
     helpMenu->addAction(restartHelp);
+    helpMenu->addAction(settingsHelp);
 
     this->timer = new QTimer();
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -67,9 +70,8 @@ void MainWindow::slot_aboutMenu(){
 }
 
 void MainWindow::slot_settingsMenu() {
-    SettingsDialog settingsDialog(this);
-    settingsDialog.setWindowTitle("Settings");
-    settingsDialog.exec();
+    SettingsDialog dialog(this);
+    dialog.exec();
 }
 
 void MainWindow::update() {
@@ -113,3 +115,12 @@ void MainWindow::restartSlots() {
     this->mainScene->restartSlots(this->difficulty->currentIndex());
     this->restartDialog->close();
 }
+
+/**
+* TODO
+ * pour le keymapping
+ * ouvrir une nouvelle fenetre, demander au user de presser une touche
+ * enregistrer la touche dans la base de donnée
+ * et la récupérer dans le code
+ * fermer la fenetre ?
+*/
