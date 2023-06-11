@@ -60,6 +60,9 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
 
     Database::setupDB();
 
+    // shop screen
+    setupShopScreen();
+
 }
 
 MyScene::~MyScene() {
@@ -124,6 +127,8 @@ void MyScene::gameOverFunc() {
     this->gameOverWidget->show();
 
     qreal score = this->player->getScore();
+
+    SettingsManager::getInstance().setValue("money", SettingsManager::getInstance().value("money").toInt() + score);
     Database::insert("INSERT INTO leaderboard (player, score, difficulty) VALUES ('"+ this->playerName +"', " + QString::number(score) +", "+ QString::number(this->difficultyLevel) +")");
 
     this->userScoreText->setText("your score : " + QString::number(score));
@@ -190,8 +195,10 @@ void MyScene::setupGameOverScreen() {
     this->leaderBoardText = new QLabel();
     this->gameOverRestartButton = new QPushButton("Restart !");
     this->gameOverQuitButton = new QPushButton("Quit !");
+    this->gameOverHomeButton = new QPushButton("Home");
     connect(this->gameOverRestartButton, SIGNAL(pressed()), this, SLOT(restartSlots()));
     connect(this->gameOverQuitButton, SIGNAL(pressed()), this, SLOT(quitSlot()));
+    connect(this->gameOverHomeButton, SIGNAL(pressed()), this, SLOT(homeSlot()));
 
 
     this->gameOverLayout->addWidget(this->userScoreText);
@@ -199,15 +206,16 @@ void MyScene::setupGameOverScreen() {
     this->gameOverLayout->addWidget(this->gameOverLeaderBoard);
     this->gameOverLayout->addWidget(this->gameOverRestartButton);
     this->gameOverLayout->addWidget(this->gameOverQuitButton);
+    this->gameOverLayout->addWidget(this->gameOverHomeButton);
 
     this->gameOverWidget->hide();
 }
 
 void MyScene::startSlot() {
-
-
+    this->gameOver = false;
     this->playerName = this->playerNameInput->text();
     this->difficultyLevel = this->difficulty->currentIndex();
+    this->player->reset();
 
     if (this->playerName.length() == 0) {
         return;
@@ -244,7 +252,10 @@ void MyScene::startSlot() {
         this->playerNameInput->hide();
         this->difficulty->hide();
         this->start->hide();
+        this->moneyText->hide();
         this->quit->hide();
+        this->shopWidget->hide();
+        this->iconShop->hide();
         this->player->startGame();
         this->player->setFocus();
         emit startGameSignal();
@@ -270,9 +281,83 @@ void MyScene::addEnemie() {
     newEnemies->setPos(x, y);
 }
 
-/**
- * TODO
- * shop :
- * db table money, c'est pas beau mais pour ce projet on va utiliser une table money mais avec une seul row qui serais le user sur le pc
- * et on va utiliser la table money et faire un widget pour acheter des skins (et des powerups ?)
-*/
+void MyScene::setupShopScreen() {
+    this->shopWidget = new QWidget();
+    this->shopLayout = new QGridLayout();
+
+    for (int i = 1; i < 10; i++) {
+        SkinCardWidget* card = new SkinCardWidget(QString::number(i), QColor(Qt::blue), 10 * (i * 4));
+
+        this->shopLayout->addWidget(card, (i-1) / 2, (i-1) % 2);
+
+        connect(card, SIGNAL(changeShipSelect()), this, SLOT(changeSkin()));
+        connect(card, SIGNAL(shipBought()), this, SLOT(updateMoney()));
+    }
+
+    this->iconShop = new QPushButton();
+    QIcon icon(":/assets/img/icon/shop.png");
+    this->iconShop->setIcon(icon);
+    this->iconShop->setIconSize(QSize(32, 32));
+    this->iconShop->setGeometry(400 - 32, 0, 32, 32);
+    addWidget(this->iconShop);
+
+    connect(this->iconShop, SIGNAL(pressed()), this, SLOT(handleShowShop()));
+
+    this->addWidget(this->shopWidget);
+    this->shopWidget->setLayout(this->shopLayout);
+    this->shopWidget->setGeometry(25, 100, 400 - 50, 800 - 200);
+
+    this->shopWidget->hide();
+
+    this->isShopOpen = false;
+    this->moneyText = new QLabel("Money : " + SettingsManager::getInstance().value("money").toString());
+    this->moneyText->setWindowOpacity(1);
+
+    this->addWidget(this->moneyText);
+    this->moneyText->setGeometry(400 - (200 + this->iconShop->width()), 0, 200, this->iconShop->height());
+}
+
+void MyScene::updateMoney() {
+    this->moneyText->setText("Money : " + SettingsManager::getInstance().value("money").toString());
+}
+
+void MyScene::handleShowShop() {
+    if (this->isShopOpen) {
+        this->shopWidget->hide();
+
+        this->start->show();
+        this->quit->show();
+        this->playerNameInput->show();
+        this->difficulty->show();
+
+        this->isShopOpen = !this->isShopOpen;
+    } else {
+        this->shopWidget->show();
+
+        this->start->hide();
+        this->quit->hide();
+        this->playerNameInput->hide();
+        this->difficulty->hide();
+
+        this->isShopOpen = !this->isShopOpen;
+    }
+}
+
+void MyScene::changeSkin() {
+    QString d = SettingsManager::getInstance().value("selectedShip").toString();
+    this->player->changePixmap(d);
+}
+
+void MyScene::homeSlot() {
+    this->gameOverWidget->hide();
+    this->playerNameInput->show();
+    this->difficulty->show();
+    this->start->show();
+    this->quit->show();
+    this->iconShop->show();
+    this->shopWidget->hide();
+    this->moneyText->show();
+    this->moneyText->setText("Money : " + SettingsManager::getInstance().value("money").toString());
+    this->player->setPos(this->width() / 2, this->height() - 100);
+    this->player->show();
+}

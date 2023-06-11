@@ -21,6 +21,7 @@
 #include "Player.h"
 #include "Enemies.h"
 #include "Database.h"
+#include "SkinCardWidget.h"
 
 class MyScene : public QGraphicsScene {
     Q_OBJECT
@@ -33,6 +34,8 @@ public:
     void resizePlane(qreal sceneWidth, qreal sceneHeight);
 
     void setupGameOverScreen();
+
+    void setupShopScreen();
 
 private:
 
@@ -55,6 +58,15 @@ private:
     QVBoxLayout* gameOverLayout = nullptr;
     QPushButton* gameOverRestartButton = nullptr;
     QPushButton* gameOverQuitButton = nullptr;
+    QPushButton* gameOverHomeButton = nullptr;
+
+
+    // Shop
+    QWidget* shopWidget = nullptr;
+    QLabel* moneyText = nullptr;
+    QGridLayout* shopLayout = nullptr;
+    QPushButton* iconShop = nullptr;
+    bool isShopOpen = false;
 
 public slots:
 
@@ -70,7 +82,15 @@ public slots:
 
     void quitSlot();
 
+    void homeSlot();
+
     void addEnemie();
+
+    void handleShowShop();
+
+    void changeSkin();
+
+    void updateMoney();
 signals:
 
     void gameOverSignal();

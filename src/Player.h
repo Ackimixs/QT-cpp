@@ -73,6 +73,8 @@ public:
     void startGame();
 
     void setDifficulty(int difficulty);
+
+    void changePixmap(QString nbShip);
 public slots:
     void addPoint();
 

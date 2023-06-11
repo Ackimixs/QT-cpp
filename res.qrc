@@ -46,6 +46,8 @@
         <file>assets/img/enemies/3.png</file>
         <file>assets/img/enemies/4.png</file>
 
+        <file>assets/img/icon/shop.png</file>
+
 
         <file>assets/sounds/gameLevelSound.wav</file>
         <file>assets/sounds/bulletShoot.wav</file>

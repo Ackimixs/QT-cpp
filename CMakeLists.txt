@@ -22,6 +22,6 @@ find_package(Qt6 COMPONENTS
 
 file (GLOB_RECURSE sourceCode src/*.cpp src/*.h main.cpp)
 
-add_executable(CPP_QT_miniprojet ${sourceCode} res.qrc src/settings.h src/keyPressedDialogRecorder.cpp src/keyPressedDialogRecorder.h)
+add_executable(CPP_QT_miniprojet ${sourceCode} res.qrc src/settings.h src/keyPressedDialogRecorder.cpp src/keyPressedDialogRecorder.h src/SkinCardWidget.cpp src/SkinCardWidget.h)
 
 target_link_libraries(CPP_QT_miniprojet Qt6::Widgets Qt6::Multimedia Qt6::Sql)

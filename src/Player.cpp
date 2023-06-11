@@ -189,6 +189,11 @@ void Player::setDifficulty(int difficulty) {
     this->difficulty = difficulty;
 }
 
+void Player::changePixmap(QString nbShip) {
+    QPixmap img(":/assets/img/player/" + nbShip + ".png");
+    this->setPixmap(img.scaled(70, 70, Qt::KeepAspectRatio));
+}
+
 /** TODO
  * faire un très grande map, avions qui décolle du sol va dans les nuages vas dans l'espace et passe dans un portail qui le tp en bas
  * quand le perso meurt il reviens en bas comme ca le widget game over reste tout le temps en bas
