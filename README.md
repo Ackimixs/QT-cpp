@@ -2,18 +2,14 @@
 ### Desc
 project based on qt6 in c++, the theme of the game is a vertical scroller
 
-Enemies spawn every 3000ms and that time decrease with your score.  
 Your score count increase everytime that you shoot on an enemies plane  
-You loose live point when an enemies bullet's touch you or an enemy plane is below your screen  
-
+You loose live point when an enemies bullet touch you or an enemy plane is below your screen
 
 ### How to play
 First of all clone that repo  
-If you want to use the postgres database change the hidden.env file into .env and fill it  
-If you want to use the file system to store leaderboard don't change anything  
 You control you plane with the arrow (can change it in the params)  
 You can change the difficulty in the params
-(beginning, medium, hard)
+(beginning, medium, hard, impossible, are u ok, powerup)
 
 To install from scratch :
 install qt6.5 -> `sudo apt-get install qt6-base-dev qtchooser qmake6 qt6-base-dev-tools qt6-multimedia-dev`  
@@ -21,13 +17,12 @@ ATTENTION : you need the multimedia package from qt6
 To check qt version run `qmake -v`
 
 If you want to active developer log mode add in main.cpp :
-`Logger::isDevMode=true` at the beginning of the main func
+`Logger::isDevMode=true` at the beginning of the main function
 
 
 ```commandline
-git clone https://github.com/ackimixs/QT-cpp
+git clone --branch miniProjet https://github.com/ackimixs/QT-cpp
 cd QT-cpp
-git checkout remotes/origin/miniProjet
 cmake .
 make
 ./CPP_QT_TPminiprojet
@@ -36,14 +31,14 @@ make
 ### Setup postgresql
 the project use postgresql to store the leaderboard or if you don't want to install it you can use the file system
 ```commandline
-sudo apt-get install postgresql postgresql-contrib
+sudo apt-get install postgresql
 sudo -u postgres psql
 ```
 ```sql
 CREATE USER scroller WITH ENCRYPTED PASSWORD 'scroller';
 CREATE DATABASE scroller owner scroller;
 ```
-fill the .env file in the root of the projet
+copy the hidden.env file as .env and fill it with your postgresql credential
 ```dotenv
 DB_HOSTNAME=localhost
 DB_DBNAME=scoller
@@ -66,6 +61,16 @@ Music :
 - bullet shoot
 - extra bonus
 
+Settings :
+- change the key binding
+- change the difficulty
+- change the music volume
+
+### ATTENTION
+#### installation
+You need to install the qt multimedia package
+#### music
+the music do not work on wsl due that wsl don't support audio nativly
 
 # Credit  
 ## game assets :
