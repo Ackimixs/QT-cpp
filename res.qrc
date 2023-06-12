@@ -52,5 +52,6 @@
         <file>assets/sounds/gameLevelSound.wav</file>
         <file>assets/sounds/bulletShoot.wav</file>
         <file>assets/sounds/extraBonus.wav</file>
+        <file>assets/sounds/musicGame.mp3</file>
     </qresource>
 </RCC>

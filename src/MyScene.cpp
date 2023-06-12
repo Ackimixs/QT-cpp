@@ -24,7 +24,7 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
     QMediaPlayer* audioPlayer = new QMediaPlayer;
     this->audioOutput = new QAudioOutput;
     audioPlayer->setAudioOutput(this->audioOutput);
-    audioPlayer->setSource(QUrl("qrc:/assets/sounds/gameLevelSound.wav"));
+    audioPlayer->setSource(QUrl("qrc:/assets/sounds/musicGame.mp3"));
     this->audioOutput->setVolume((this->mainVolume / 100) * (this->gameVolume / 100));
     audioPlayer->setLoops(QMediaPlayer::Infinite);
     audioPlayer->play();
@@ -40,7 +40,9 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
 
     this->playerNameInput = new QLineEdit();
     this->start = new QPushButton("start");
+    this->start->setStyleSheet("background-color: black; color: white;");
     this->quit = new QPushButton("quit");
+    this->quit->setStyleSheet("background-color: black; color: white;");
 
     this->playerNameInput->setPlaceholderText("username");
     // Set the background color to transparent

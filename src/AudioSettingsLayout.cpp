@@ -17,6 +17,5 @@ void AudioSettingsLayout::setAudioLevel(int level) {
 }
 
 void AudioSettingsLayout::changeAudioLevel(int level) {
-    qInfo() << settingName << " : " << level;
     SettingsManager::getInstance().setValue(this->settingName, level);
 }
