@@ -70,7 +70,11 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
 
 MyScene::~MyScene() {
     this->timer->destroyed();
+    this->player->destroyed();
     Database::closeDB();
+
+    delete this->player;
+    delete this->timer;
 }
 
 void MyScene::update() {

@@ -25,7 +25,7 @@ void Enemies::move() {
         return;
     }
 
-    if (Utils::randInt(0, 50) == 2) {
+    if (Utils::randInt(0, 75) == 2) {
         Bullet* bullet = new Bullet(":/assets/img/bullet/fire_ball_1.png", Bullet::enemieBullet, 90, 10);
         this->scene()->addItem(bullet);
         bullet->setPos(this->x() - this->pixmap().width() / 2, this->y());
@@ -38,6 +38,7 @@ void Enemies::move() {
 
     if (this->y() - this->pixmap().height() > this->scene()->height()) {
         emit reachEndOfMapSignal();
+        delete this;
     }
 }
 
