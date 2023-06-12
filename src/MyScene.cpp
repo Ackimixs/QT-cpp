@@ -40,9 +40,9 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
 
     this->playerNameInput = new QLineEdit();
     this->start = new QPushButton("start");
-    this->start->setStyleSheet("background-color: black; color: white;");
+    this->start->setStyleSheet("QPushButton { background-color: black; color: white; }");
     this->quit = new QPushButton("quit");
-    this->quit->setStyleSheet("background-color: black; color: white;");
+    this->quit->setStyleSheet("QPushButton { background-color: black; color: white; }");
 
     this->playerNameInput->setPlaceholderText("username");
     // Set the background color to transparent

@@ -1,0 +1,39 @@
+- INSTALLATION
+install qt6.5 -> `sudo apt-get install qt6-base-dev qtchooser qmake6 qt6-base-dev-tools qt6-multimedia-dev`
+ATTENTION : vous avez besoin de la version 6.5 de qt.
+To check qt version run `qmake -v`
+
+si vous voulez utilisez la database postgres, si vous ne voulez pas vous pouvez garder le file system :
+
+sudo apt-get install postgresql
+sudo -u postgres psql
+
+CREATE USER scroller WITH ENCRYPTED PASSWORD 'scroller';
+CREATE DATABASE scroller owner scroller;
+
+copier le fichier hidden.env en .env et remplir les champs avec vos identifiants postgresql
+DB_HOSTNAME=localhost
+DB_DBNAME=scoller
+DB_USERNAME=scroller
+DB_PASSWORD=scroller
+
+
+psql -U scroller -d scroller -f ./sql/model.sql
+psql -U scroller -d scroller -f ./sql/data.sql
+
+
+- BUILD
+cmake .
+make
+./CPP_QT_TPminiprojet
+
+
+- Commande de jeu
+Les commande de base sont zqsd pour se déplacer, espace pour tirer, r pour restart.
+vous devez tirer sur les ennemis pour gagner des points et éviter de vous faire toucher par les ennemis.
+vous pouvez aussi ramasser des bonus qui vous permettent de gagner des points ou de vous soigner.
+
+
+- Particularité
+settings avec le volume et l'attribut des touches
+difficulter allant de easy à hard et le mode powerup
