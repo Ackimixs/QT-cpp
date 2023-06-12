@@ -18,11 +18,14 @@ MyScene::MyScene(QObject* parent) : QGraphicsScene(parent), gameOver(false) {
     connect(this->player, SIGNAL(gameOverFunc()), this, SLOT(gameOverFunc()));
     connect(this->player, SIGNAL(gameRestartSignal()), this, SLOT(restartSlots()));
 
+    this->mainVolume = SettingsManager::getInstance().value("mainMusicLevel").toInt();
+    this->gameVolume = SettingsManager::getInstance().value("gameMusicLevel").toInt();
+
     QMediaPlayer* audioPlayer = new QMediaPlayer;
-    QAudioOutput* audioOutput = new QAudioOutput;
-    audioPlayer->setAudioOutput(audioOutput);
+    this->audioOutput = new QAudioOutput;
+    audioPlayer->setAudioOutput(this->audioOutput);
     audioPlayer->setSource(QUrl("qrc:/assets/sounds/gameLevelSound.wav"));
-    audioOutput->setVolume(0.1f);
+    this->audioOutput->setVolume((this->mainVolume / 100) * (this->gameVolume / 100));
     audioPlayer->setLoops(QMediaPlayer::Infinite);
     audioPlayer->play();
 
@@ -299,6 +302,7 @@ void MyScene::setupShopScreen() {
     this->iconShop->setIcon(icon);
     this->iconShop->setIconSize(QSize(32, 32));
     this->iconShop->setGeometry(400 - 32, 0, 32, 32);
+
     addWidget(this->iconShop);
 
     connect(this->iconShop, SIGNAL(pressed()), this, SLOT(handleShowShop()));
@@ -360,4 +364,12 @@ void MyScene::homeSlot() {
     this->moneyText->setText("Money : " + SettingsManager::getInstance().value("money").toString());
     this->player->setPos(this->width() / 2, this->height() - 100);
     this->player->show();
+}
+
+void MyScene::updateSettings() {
+    this->mainVolume = SettingsManager::getInstance().value("mainMusicLevel").toInt();
+    this->gameVolume = SettingsManager::getInstance().value("gameMusicLevel").toInt();
+    qInfo() << SettingsManager::getInstance().value("mainMusicLevel").toInt();
+    this->player->volumeChanged();
+    this->audioOutput->setVolume((this->mainVolume / 100) * (this->gameVolume / 100));
 }

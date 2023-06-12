@@ -47,6 +47,10 @@ private:
 
     int difficulty;
 
+    float effectVolume;
+
+    float mainVolume;
+
 public:
     Player(QString imageFileName, QGraphicsItem* parent = nullptr);
 
@@ -75,6 +79,8 @@ public:
     void setDifficulty(int difficulty);
 
     void changePixmap(QString nbShip);
+
+    void volumeChanged();
 public slots:
     void addPoint();
 

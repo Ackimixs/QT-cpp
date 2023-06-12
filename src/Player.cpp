@@ -21,6 +21,8 @@ Player::Player(QString imageFileName, QGraphicsItem* parent) : QObject(), QGraph
     this->timer = new QTimer();
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
 
+    this->effectVolume = SettingsManager::getInstance().value("effectMusicLevel").toInt();
+    this->mainVolume = SettingsManager::getInstance().value("mainMusicLevel").toInt();
 }
 
 Player::~Player() {
@@ -65,9 +67,8 @@ void Player::keyPressEvent(QKeyEvent *event) {
             QAudioOutput* audio = new QAudioOutput;
             player->setAudioOutput(audio);
             player->setSource(QUrl("qrc:/assets/sounds/bulletShoot.wav"));
-            audio->setVolume(0.2f);
+            audio->setVolume((this->mainVolume / 100) * (this->effectVolume / 100));
             player->play();
-
 
             this->timeUntilNewShoot = QTime::currentTime().addMSecs(this->timeBetween2Shoot);
 
@@ -84,6 +85,7 @@ void Player::keyPressEvent(QKeyEvent *event) {
             connect(bullet, SIGNAL(collisionWithEnemiesSignal()), this, SLOT(addPoint()));
             connect(bulletLeft, SIGNAL(collisionWithEnemiesSignal()), this, SLOT(addPoint()));
             connect(bulletRight, SIGNAL(collisionWithEnemiesSignal()), this, SLOT(addPoint()));
+
         }
     }
 
@@ -152,7 +154,7 @@ void Player::update() {
             QAudioOutput* audio = new QAudioOutput;
             player->setAudioOutput(audio);
             player->setSource(QUrl("qrc:/assets/sounds/extraBonus.wav"));
-            audio->setVolume(0.1f);
+            audio->setVolume((this->mainVolume / 100) * (this->effectVolume / 100));
             player->play();
 
 
@@ -194,8 +196,7 @@ void Player::changePixmap(QString nbShip) {
     this->setPixmap(img.scaled(70, 70, Qt::KeepAspectRatio));
 }
 
-/** TODO
- * faire un très grande map, avions qui décolle du sol va dans les nuages vas dans l'espace et passe dans un portail qui le tp en bas
- * quand le perso meurt il reviens en bas comme ca le widget game over reste tout le temps en bas
- * le reset le fait aussi aller en bas
- */
+void Player::volumeChanged() {
+    this->effectVolume = SettingsManager::getInstance().value("effectMusicLevel").toInt();
+    this->mainVolume = SettingsManager::getInstance().value("mainMusicLevel").toInt();
+}

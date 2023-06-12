@@ -57,6 +57,15 @@ void settingUp() {
     if (!settings.contains("hasShip9")) {
         settings.setValue("hasShip9", false);
     }
+    if (!settings.contains("mainMusicLevel")) {
+        settings.setValue("mainMusicLevel", 50.0);
+    }
+    if (!settings.contains("gameMusicLevel")) {
+        settings.setValue("gameMusicLevel", 50.0);
+    }
+    if (!settings.contains("effectMusicLevel")) {
+        settings.setValue("effectMusicLevel", 50.0);
+    }
 }
 
 int main(int argc, char *argv[]) {

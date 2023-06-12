@@ -37,6 +37,8 @@ public:
 
     void setupShopScreen();
 
+    void updateSettings();
+
 private:
 
     QLineEdit* playerNameInput;
@@ -67,6 +69,11 @@ private:
     QGridLayout* shopLayout = nullptr;
     QPushButton* iconShop = nullptr;
     bool isShopOpen = false;
+
+    QAudioOutput* audioOutput;
+
+    float mainVolume;
+    float gameVolume;
 
 public slots:
 

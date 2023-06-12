@@ -10,6 +10,8 @@
 
 #include "Database.h"
 #include "MappingLayout.h"
+#include "AudioSettingsLayout.h"
+#include "settings.h"
 
 class SettingsDialog : public QDialog {
     Q_OBJECT
@@ -18,6 +20,11 @@ public:
 
 private:
     QVBoxLayout* layout;
+
+    AudioSettingsLayout* mainMusicVolume;
+    AudioSettingsLayout* gameMusique;
+    AudioSettingsLayout* effectMusique;
+
 
     MappingLayout* forwardKey;
     MappingLayout* rightKey;
@@ -28,6 +35,9 @@ private:
 
 public slots:
     void saveSettings();
+
+signals:
+    void settingsSaved();
 };
 
 

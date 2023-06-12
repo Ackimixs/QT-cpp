@@ -43,6 +43,8 @@ public slots:
 
     void slot_restartMenu();
 
+    void slot_settingsSaved();
+
     void update();
 
     void startGame();

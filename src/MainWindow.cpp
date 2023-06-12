@@ -31,12 +31,15 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
     QAction* actionHelp = new QAction(tr("&About"), this);
     QAction* restartHelp = new QAction(tr("&Restart"), this);
     QAction* settingsHelp = new QAction(tr("&Settings"), this);
+    QAction* quitHelp = new QAction(tr("&Quit"), this);
     connect(actionHelp, SIGNAL(triggered()), this, SLOT(slot_aboutMenu()));
     connect(restartHelp, SIGNAL(triggered()), this, SLOT(slot_restartMenu()));
     connect(settingsHelp, SIGNAL(triggered()), this, SLOT(slot_settingsMenu()));
+    connect(quitHelp, SIGNAL(triggered()), this, SLOT(close()));
     helpMenu->addAction(actionHelp);
     helpMenu->addAction(restartHelp);
     helpMenu->addAction(settingsHelp);
+    helpMenu->addAction(quitHelp);
 
     this->timer = new QTimer();
     connect(this->timer, SIGNAL(timeout()), this, SLOT(update()));
@@ -46,7 +49,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 }
 
 MainWindow::~MainWindow(){
-
+    delete this->mainScene;
+    delete this->mainView;
+    delete this->backgroundImg;
+    delete this->timer;
 }
 
 void MainWindow::slot_aboutMenu(){
@@ -70,8 +76,10 @@ void MainWindow::slot_aboutMenu(){
 }
 
 void MainWindow::slot_settingsMenu() {
-    SettingsDialog dialog(this);
-    dialog.exec();
+    SettingsDialog* dialog = new SettingsDialog(this);
+    dialog->setFixedSize(400, 400);
+    connect(dialog, SIGNAL(settingsSaved()), this, SLOT(slot_settingsSaved()));
+    dialog->exec();
 }
 
 void MainWindow::update() {
@@ -116,11 +124,6 @@ void MainWindow::restartSlots() {
     this->restartDialog->close();
 }
 
-/**
-* TODO
- * pour le keymapping
- * ouvrir une nouvelle fenetre, demander au user de presser une touche
- * enregistrer la touche dans la base de donnée
- * et la récupérer dans le code
- * fermer la fenetre ?
-*/
+void MainWindow::slot_settingsSaved() {
+    this->mainScene->updateSettings();
+}
